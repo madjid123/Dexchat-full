@@ -4,7 +4,7 @@ const mongoose = require('mongoose')
 const messageRoomSchema = new mongoose.Schema({
     Name: {
         type: String,
-        required: "name is required",
+        required: Boolean
 
     }
 
@@ -12,4 +12,4 @@ const messageRoomSchema = new mongoose.Schema({
 
 
 
-module.exports = mongoose.model('messageRoom', messageRoomSchema)
+module.exports = mongoose.model('MessageRoom', messageRoomSchema)

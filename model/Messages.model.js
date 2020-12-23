@@ -1,26 +1,28 @@
 const mongoose = require('mongoose')
 
 
-const messagesSchema = new mongoose.Schema({
-    MessageRoom: {
-        $type: mongoose.Schema.$types.ObjectId,
-        required: "messageRoom is required",
-        ref: 'messageRoom'
+var messagesSchema = new mongoose.Schema({
+    messageRoom: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "MessageRoom",
+        required: Boolean
+
 
     },
     User: {
-        $type: mongoose.Schema.$types.objectId,
-        required: "user is required",
-        ref: 'user'
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: Boolean
+
 
     },
     Message: {
-        $type: String,
-        required: "message is required"
+        type: String,
+        required: Boolean
     }
 
 })
 
 
 
-module.exports = mongoose.model('messages', messagesSchema)
+module.exports = mongoose.model('Messages', messagesSchema)
