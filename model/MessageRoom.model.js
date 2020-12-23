@@ -5,9 +5,7 @@ const messageRoomSchema = new mongoose.Schema({
     Name: {
         type: String,
         required: Boolean
-
     }
-
 })
 
 

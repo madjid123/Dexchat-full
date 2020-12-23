@@ -14,4 +14,10 @@ mongoose.connect(process.env.DATABASE, { useNewUrlParser: true, useUnifiedTopolo
 })
 
 console.log("hello")
-app.listen(5000, () => { console.log("app is running on port 3000") })
+const server = app.listen(5000, () => { console.log("app is running on port 3000") })
+
+process.on("SIGINT", () => {
+    server.close((err) => { console.log(err.message) })
+    mongoose.disconnect()
+
+})

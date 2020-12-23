@@ -13,14 +13,11 @@ var messagesSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
         required: Boolean
-
-
     },
     Message: {
         type: String,
         required: Boolean
     }
-
 })
 
 
