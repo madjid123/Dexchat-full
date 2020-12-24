@@ -1,0 +1,3 @@
+[submodule "dexchat"]
+	path = dexchat
+	url = git://github.com/madjid123/dexchat.git
