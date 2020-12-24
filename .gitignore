@@ -12,7 +12,7 @@
 /build
 
 keys.js
-.env
+/.env
 # misc
 .DS_Store
 .env.local
