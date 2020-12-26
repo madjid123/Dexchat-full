@@ -10,7 +10,7 @@ require('./model/MessageRoom.model')
 
 
 console.log("hello")
-const server = app.listen(5000, () => { console.log("app is running on port 3000") })
+const server = app.listen(5000, () => { console.log("app is running on port 5000") })
 
 process.on("SIGINT", () => {
     server.close((err) => { console.log(err.message) })

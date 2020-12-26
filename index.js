@@ -16,6 +16,7 @@ mongoose.connect(keys.mongodb.dbURI, { useNewUrlParser: true, useUnifiedTopology
 
 })
 
+app.use(require('cors')())
 
 app.get('/', (req, res) => { res.send("<h1> hello </h1>") })
 
@@ -28,8 +29,9 @@ app.get('/auth/google/callback',
     function (req, res) {
         res.redirect('/');
     });
-app.post('/sendmsg', (req, res) => { res.json(req.body.msg) })
+const Router = express.Router()
+Router.get('/sendmsg', (req, res) => { res.header("Access-Control-Allow-Origin", "*"); res.json("hello") })
 
-
+app.use(Router)
 
 module.exports = { app, db: mongoose }
