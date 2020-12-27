@@ -1,19 +1,14 @@
 const e = require('express');
-const { app, db } = require('../index');
+const app = e.Router()
 const user = require('../model/User.model')
-const js = require("js-sha256")
-js.sha256()
-app.get('/register', (req, res) => {
-
-    const { name, email, password } = req.body
-    user.find({ name: name }, (err, user) => {
-
-        if (err) console.log(err)
-        if (user === undefined) {
-            var data = new user({ name, email, sha256(password) })
-            data.save()
-        }
-    })
+const { sha256 } = require("js-sha256")
+app.route('/register').post((req, res, next) => {
+    console.log(req.body)
+    res.json("hello")
 })
+app.get('/register', (req, res, next) => {
+    res.json("kdjf")
+})
+const Register = app
 
-
+module.exports = Register

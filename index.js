@@ -5,7 +5,10 @@ var keys = require('./config/keys')
 var bodyParser = require('body-parser')
 const mongoose = require('mongoose')
 const passport = require('./config/Passport')
+const Register = require('./routes/register.route')
 
+app.use(express.urlencoded({ extended: true }))
+app.use(express.json())
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
@@ -18,6 +21,9 @@ mongoose.connect(keys.mongodb.dbURI, { useNewUrlParser: true, useUnifiedTopology
 
 app.use(require('cors')())
 
+app.use(Register, (res, req, next) => {
+    next();
+})
 app.get('/', (req, res) => { res.send("<h1> hello </h1>") })
 
 app.get("/auth/google", passport.authenticate("google", {
