@@ -2,15 +2,17 @@
 var express = require('express')
 var app = express()
 var keys = require('./config/keys')
-var bodyParser = require('body-parser')
+const fs = require('fs')
+
 const mongoose = require('mongoose')
 const passport = require('./config/Passport')
 const Register = require('./routes/register.route')
 
+
+
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: true }))
+
 
 mongoose.connect(keys.mongodb.dbURI, { useNewUrlParser: true, useUnifiedTopology: true, skipCache: true }, (err) => {
     if (err) console.log("mongoose ERR : ", err.message)
@@ -21,9 +23,19 @@ mongoose.connect(keys.mongodb.dbURI, { useNewUrlParser: true, useUnifiedTopology
 
 app.use(require('cors')())
 
-app.use(Register, (res, req, next) => {
-    next();
+// app.use(Register, (res, req, next) => {
+//     next();
+// })
+
+fs.readdir('./routes', (err, files) => {
+    files.filter(file => {
+        file = file.slice(0, file.length - 3)
+        app.use('/', require('./routes/' + file))
+    })
 })
+
+
+
 app.get('/', (req, res) => { res.send("<h1> hello </h1>") })
 
 app.get("/auth/google", passport.authenticate("google", {
