@@ -2,8 +2,10 @@ const app = require('express').Router()
 const user = require('../model/User.model')
 const { sha256 } = require("js-sha256")
 app.route('/register').post((req, res, next) => {
-    console.log(req.body)
+    if (!req.body) res.status(404).json({ err: "true", msg: " no data received ! " })
+
     const { name, email, password } = req.body
+
     user.findOne({ name, email, password }, (err, person) => {
         console.log(person)
         if (person != null && (person.name === name || person.email === email)) {
@@ -12,7 +14,7 @@ app.route('/register').post((req, res, next) => {
         } else {
             var newUser = new user({ name, email, password: sha256(password) })
             newUser.save()
-            res.json({ err: false, msg: "User successfully created" })
+            res.json({ err: false, msg: "User successfully created", name: name })
         }
     }
     )
