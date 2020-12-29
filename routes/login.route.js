@@ -1,9 +1,10 @@
 
+const app = require('./home.router')
 
-const app = require('express').Router();
 const sha256 = require('js-sha256')
 const User = require('../model/User.model')
-const expressSession = require('express-session')
+
+
 app.post('/login', (req, res, next) => {
     if (!req.body) res.json("email and password must be provided")
     var { email, password } = req.body
@@ -16,6 +17,7 @@ app.post('/login', (req, res, next) => {
         if (result) {
             if (email == result.email && password == result.password) {
                 req.session.user = result.name
+                console.log(req.session)
                 res.json({ err: false, msg: "Loged in successfully", name: result.name })
             }
         } else {
@@ -27,5 +29,10 @@ app.post('/login', (req, res, next) => {
 app.get('/login', (req, res, next) => {
     res.json("ldsjfld")
 })
+app.get('/logout', (req, res, next) => {
+    req.session.destroy()
+    res.json("logged out successfully")
+})
+
 module.exports = app
 

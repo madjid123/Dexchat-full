@@ -1,7 +1,9 @@
-const app = require('express').Router()
+const app = require('./login.route')
 const user = require('../model/User.model')
 const { sha256 } = require("js-sha256")
 app.route('/register').post((req, res, next) => {
+
+    if (req.session.user) res.json({ err: true, msg: "you must logout" })
     if (!req.body) res.status(404).json({ err: "true", msg: " no data received ! " })
 
     const { name, email, password } = req.body
@@ -19,9 +21,9 @@ app.route('/register').post((req, res, next) => {
     }
     )
 })
-app.get('/register', (req, res, next) => {
-    res.json("kdjf")
-})
+
+
+
 const Register = app
 
 module.exports = Register

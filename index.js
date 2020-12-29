@@ -7,14 +7,10 @@ const fs = require('fs')
 
 const mongoose = require('mongoose')
 const passport = require('./config/Passport')
-const Register = require('./routes/register.route')
+const expressSession = require('express-session')
 
-const expressSession = require('express-session')({
-    secret: process.env.SESSION_TOKEN,
-    resave: false,
-    saveUninitialized: false
-})
-app.use(expressSession)
+
+
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 
@@ -26,23 +22,33 @@ mongoose.connect(keys.mongodb.dbURI, { useNewUrlParser: true, useUnifiedTopology
 
 })
 
-app.use(require('cors')())
+app.use(require('cors')({
+    origin: ['http://localhost:3000'],
+    methods: ['GET', 'POST'],
+    credentials: true // enable set cookie
+}))
 
-// app.use(Register, (res, req, next) => {
-//     next();
+app.use('/', require('./routes/register.route'))
+// fs.readdir('./routes', (err, files) => {
+//     files.filter(file => {
+//         file = file.slice(0, file.length - 3)
+//         app.use('/', require('./routes/' + file))
+//         app.use(require('./routes/' + file))
+//     })
 // })
 
-fs.readdir('./routes', (err, files) => {
-    files.filter(file => {
-        file = file.slice(0, file.length - 3)
-        app.use('/', require('./routes/' + file))
-    })
+app.get('/', (req, res, next) => {
+    res.json("hello")
 })
 
+app.get('/loggedin', (req, res, next) => {
 
-
-app.get('/', (req, res) => { res.send("<h1> hello </h1>") })
-
+    if (req.session.user)
+        res.json(req.session.user)
+    else {
+        res.json({ err: true, msg: "Not logged in" })
+    }
+})
 app.get("/auth/google", passport.authenticate("google", {
     scope: ["profile", "email"]
 }));
@@ -53,7 +59,7 @@ app.get('/auth/google/callback',
         res.redirect('/');
     });
 const Router = express.Router()
-Router.get('/sendmsg', (req, res) => { res.header("Access-Control-Allow-Origin", "*"); res.json("hello") })
+
 
 app.use(Router)
 
