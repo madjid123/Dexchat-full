@@ -1,4 +1,5 @@
 
+require('dotenv').config()
 var express = require('express')
 var app = express()
 var keys = require('./config/keys')
@@ -8,8 +9,12 @@ const mongoose = require('mongoose')
 const passport = require('./config/Passport')
 const Register = require('./routes/register.route')
 
-
-
+const expressSession = require('express-session')({
+    secret: process.env.SESSION_TOKEN,
+    resave: false,
+    saveUninitialized: false
+})
+app.use(expressSession)
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 
