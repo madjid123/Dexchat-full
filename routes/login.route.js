@@ -15,11 +15,11 @@ app.post('/login', (req, res, next) => {
             res.json({ err: true, msg: "Connection with db timed out" })
         }
         if (result) {
-            if (email == result.email && password == result.password) {
-                req.session.user = result.name
 
-                res.json({ err: false, msg: "Loged in successfully", name: result.name })
-            }
+            req.session.user = result.name
+
+            res.json({ err: false, msg: "Loged in successfully", name: result.name })
+
         } else {
             res.json({ err: true, msg: "there is no  such user matching this information" })
         }
@@ -31,6 +31,7 @@ app.get('/login', (req, res, next) => {
 })
 app.get('/logout', (req, res, next) => {
     req.session.destroy()
+    console.log("loggedout")
     res.json("logged out successfully")
 })
 

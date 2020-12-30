@@ -44,7 +44,7 @@ app.get('/', (req, res) => {
 app.get('/loggedin', (req, res, next) => {
 
     if (req.session.user)
-        res.json(req.session.user)
+        res.json({ name: req.session.user })
     else {
         res.json({ err: true, msg: "Not logged in" })
     }
