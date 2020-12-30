@@ -37,8 +37,8 @@ app.use('/', require('./routes/register.route'))
 //     })
 // })
 
-app.get('/', (req, res, next) => {
-    res.json("hello")
+app.get('/', (req, res) => {
+    res.json("Welcome " + (req.session.user === undefined) ? "" : `${req.session.user}`)
 })
 
 app.get('/loggedin', (req, res, next) => {

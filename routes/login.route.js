@@ -17,7 +17,7 @@ app.post('/login', (req, res, next) => {
         if (result) {
             if (email == result.email && password == result.password) {
                 req.session.user = result.name
-                console.log(req.session)
+
                 res.json({ err: false, msg: "Loged in successfully", name: result.name })
             }
         } else {
