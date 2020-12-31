@@ -6,7 +6,7 @@ const User = require('../model/User.model')
 
 
 app.post('/login', (req, res, next) => {
-    if (!req.body) res.json("email and password must be provided")
+    if (!req.body || !req.body.email || !req.body.password) return res.json("email and password must be provided")
     var { email, password } = req.body
     password = sha256(password)
     User.findOne({ email, password }, (err, result) => {

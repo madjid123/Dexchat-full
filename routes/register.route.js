@@ -5,17 +5,18 @@ const { sha256 } = require("js-sha256")
 
 app.post('/register', async (req, res, next) => {
 
-    if (req.session.user) res.json({ err: true, msg: "you must logout" })
-    if (!req.body) res.status(404).json({ err: "true", msg: " no data received ! " })
+    if (req.session.user) return res.json({ err: true, msg: "you must logout" })
+
 
     const { name, email, password } = req.body
+    if (!req.body || (!name || !email || !password)) return res.json({ err: "true", msg: "You have to fill the form !" })
 
     const persons = await user.find({ $or: [{ "email": email }, { "name": name }] })
 
 
     if (persons.length !== 0) {
 
-        res.json({ err: true, msg: "User already exist" })
+        return res.json({ err: true, msg: "User already exist" })
 
     }
     else {
