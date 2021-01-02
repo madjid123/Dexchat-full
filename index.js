@@ -38,6 +38,8 @@ app.use('/', require('./routes/register.route'))
 // })
 
 app.get('/', (req, res) => {
+    console.log(req)
+    if (req.user) console.log(req.user)
     res.json("Welcome " + (req.session.user === undefined) ? "" : `${req.session.user}`)
 })
 
@@ -51,10 +53,20 @@ app.get('/loggedin', (req, res, next) => {
 })
 app.get("/auth/google", passport.authenticate("google", {
     scope: ["profile", "email"]
-}));
+}), (req, res) => {
+    console.log(req.body)
+});
 
+app.get("/auth/google/redirect", (req, res) => {
+
+    res.redirect("/")
+})
+app.get("/failedGoogleLogin", (req, res) => {
+    res.json("Failed to login using google")
+
+})
 app.get('/auth/google/callback',
-    passport.authenticate('google', { failureRedirect: '/login' }),
+    passport.authenticate('google', { failureRedirect: '/failedGoogleLogin' }),
     function (req, res) {
         res.redirect('/');
     });

@@ -12,7 +12,7 @@ passport.use(
         {
             clientID: keys.google.GOOGLE_CLIENT_ID,
             clientSecret: keys.google.GOOGLE_CLIENT_SECRET,
-            callbackURL: "/auth/google/redirect"
+            callbackURL: "http://fkrdm.com:5000/auth/google/redirect"
         }, (accessToken, refreshToken, profile, done) => {
             // passport callback function
             //check if user already exists in our db with the given profile ID
