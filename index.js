@@ -38,9 +38,15 @@ app.use('/', require('./routes/register.route'))
 // })
 
 app.get('/', (req, res) => {
-    console.log(req)
+    console.log(req.profile)
     if (req.user) console.log(req.user)
     res.json("Welcome " + (req.session.user === undefined) ? "" : `${req.session.user}`)
+})
+app.get('/auth/google/logout', (req, res) => {
+    console.log(req.user)
+
+    req.logOut()
+    res.redirect("https://accounts.google.com/logout")
 })
 
 app.get('/loggedin', (req, res, next) => {
