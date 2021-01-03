@@ -29,9 +29,11 @@ module.exports = function (passport) {
                     let user = await User.findOne({ googleId: profile.id })
 
                     if (user) {
+                        user = { name: user.name, id: user.id }
                         done(null, user)
                     } else {
                         user = await User.create(newUser)
+                        user = { name: user.name, id: user.id }
                         done(null, user)
                     }
                 } catch (err) {
@@ -41,7 +43,7 @@ module.exports = function (passport) {
 
             }));
     passport.serializeUser((user, done) => {
-        done(null, user.id)
+        done(null, user)
     })
 
     passport.deserializeUser((id, done) => {
