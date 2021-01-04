@@ -37,40 +37,25 @@ app.use(require('cors')({
 
 
 app.use('/', require('./routes/register.route'))
-// fs.readdir('./routes', (err, files) => {
-//     files.filter(file => {
-//         file = file.slice(0, file.length - 3)
-//         app.use('/', require('./routes/' + file))
-//         app.use(require('./routes/' + file))
-//     })
-// })
+fs.readdir('./routes', (err, files) => {
+    files.filter(file => {
+        file = file.slice(0, file.length - 3)
+        app.use('/', require('./routes/' + file))
+        app.use(require('./routes/' + file))
+    })
+})
 
 app.get('/', (req, res) => {
-    console.log(req.session)
-    console.log(req.user)
-    if (req.user) console.log(req.user)
-    res.json("Welcome " + (req.session.user === undefined) ? "" : `${req.session.user}`)
-})
-app.get('/auth/google/logout', (req, res) => {
-    console.log(req.user)
 
-    req.session.destroy(function (e) {
-        req.logOut()
-        req.logout();
-        res.redirect('/');
-    });
 
+    res.json("Welcome " + (req.session.passport.user.name === undefined) ? "" : `${req.session.user}`)
 })
+
 
 app.get('/loggedin', (req, res, next) => {
 
-    if (req.session) {
-        let name = ""
-        if (req.session.user) name = req.session.user
-        else {
-            User.find
-        }
-        res.json({ name: name })
+    if (req.session.passport) {
+        res.json({ name: req.session.passport.user.name })
     }
     else {
         res.json({ err: true, msg: "Not logged in" })
