@@ -9,10 +9,17 @@ const mongoose = require('mongoose')
 const passport = require('passport')
 require('./config/Passport')(passport)
 
-const expressSession = require('express-session')
+const expressSession = require('express-session')({
+    secret: process.env.SESSION_TOKEN,
+    resave: true,
+    saveUninitialized: true,
+    cookie: {
+        maxAge: 1000000000,
 
+    }
+})
 
-
+app.use(expressSession)
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 
@@ -45,22 +52,12 @@ fs.readdir('./routes', (err, files) => {
     })
 })
 
-app.get('/', (req, res) => {
 
 
-    res.json("Welcome " + (req.session.passport.user.name === undefined) ? "" : `${req.session.user}`)
-})
 
 
-app.get('/loggedin', (req, res, next) => {
 
-    if (req.session.passport) {
-        res.json({ name: req.session.passport.user.name })
-    }
-    else {
-        res.json({ err: true, msg: "Not logged in" })
-    }
-})
+
 app.get("/auth/google", passport.authenticate("google", {
     scope: ["profile", "email"]
 }), (req, res) => {

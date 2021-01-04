@@ -1,5 +1,5 @@
 
-const app = require('./home.router')
+const app = require('./home.route')
 const passport = require('passport')
 const sha256 = require('js-sha256')
 const User = require('../model/User.model')
@@ -17,6 +17,7 @@ app.post('/login', (req, res, next) => {
         else {
             console.log(user)
             req.login(user, err => { console.log(err) })
+
             res.redirect('/loggedin')
         }
 
@@ -46,16 +47,25 @@ app.post('/login', (req, res, next) => {
 // })
 
 
-app.get('/login', (req, res, next) => {
-    res.json("ldsjfld")
-})
+
 app.get('/logout', (req, res, next) => {
     req.session.destroy()
-    console.log("loggedout")
+    console.log("logged out")
+
     req.logout()
 
     res.json("logged out successfully")
 })
 
+
+app.get('/loggedin', (req, res, next) => {
+
+    if (req.session.passport) {
+        res.json({ name: req.session.passport.user.name, id: req.session.passport.user.id })
+    }
+    else {
+        res.json({ err: true, msg: "Not logged in" })
+    }
+})
 module.exports = app
 
