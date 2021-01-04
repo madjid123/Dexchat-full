@@ -1,11 +1,11 @@
 const app = require('./register.route');
 const router = require('express').Router();
-const mongoose = require('mongoose');
-const passport = require('passport');
+const MessageRoom = require('../model/MessageRoom.model')
 
 
 
 router.get("/:id", (req, res) => {
+    var Contacts = await MessageRoom.find({})
     res.json(req.params.id)
 
 })
