@@ -4,7 +4,7 @@ const mongoose = require('mongoose')
 var keys = require('./config/keys')
 require('./model/User.model')
 require('./model/Messages.model')
-require('./model/MessageRoom.model')
+require('./model/Contact.model')
 
 
 

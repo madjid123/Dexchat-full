@@ -2,19 +2,24 @@ const mongoose = require('mongoose')
 
 
 var messagesSchema = new mongoose.Schema({
-    messageRoom: {
+    contact: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "MessageRoom",
+        ref: "Contact",
         required: Boolean
 
 
     },
-    User: {
+    sender: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
         required: Boolean
     },
-    Message: {
+    receiver: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: Boolean
+    },
+    message: {
         type: String,
         required: Boolean
     }
@@ -22,4 +27,4 @@ var messagesSchema = new mongoose.Schema({
 
 
 
-module.exports = mongoose.model('Messages', messagesSchema)
+module.exports = mongoose.model('Message', messagesSchema)

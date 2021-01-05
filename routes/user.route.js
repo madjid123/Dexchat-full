@@ -1,12 +1,12 @@
 const app = require('./register.route');
 const router = require('express').Router();
-const MessageRoom = require('../model/MessageRoom.model')
+const Contact = require('../model/Contact.model')
 
 
 
-router.get("/:id", (req, res) => {
-    var Contacts = await MessageRoom.find({})
-    res.json(req.params.id)
+router.get("/:id", async (req, res) => {
+    var Contacts = await Contact.find({ $or: [{ firstSide: req.params.id }, { secondSide: req.params.id }] }, (err) => console.log(err))
+    res.json({ Contacts: Contacts })
 
 })
 
