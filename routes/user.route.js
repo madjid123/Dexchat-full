@@ -5,7 +5,15 @@ const Contact = require('../model/Contact.model')
 
 
 router.get("/:id", async (req, res) => {
-    var Contacts = await Contact.find({ $or: [{ firstSide: req.params.id }, { secondSide: req.params.id }] }, (err) => console.log(err))
+    var Contacts = await Contact.find({
+        $or: [
+            { firstSide: req.params.id },
+            { secondSide: req.params.id }
+        ]
+    },
+        (err) => {
+            if (err) console.log(err)
+        })
     res.json({ Contacts: Contacts })
 
 })
