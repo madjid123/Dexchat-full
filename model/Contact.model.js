@@ -7,10 +7,10 @@ const ContactSchema = new mongoose.Schema({
         required: Boolean
     },
     firstSide: {
-        type: String, required: Boolean
+        type: mongoose.Schema.Types.ObjectId, required: Boolean
     },
     SecondSide: {
-        type: String, required: Boolean
+        type: mongoose.Schema.Types.ObjectId, required: Boolean
     }
 
 
