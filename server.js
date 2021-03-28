@@ -10,7 +10,6 @@ const https = require('http')
 
 
 
-console.log("hello")
 const server = app.listen(5000, () => { console.log("app is running on port 5000") })
 const Server = https.createServer(app)
 
