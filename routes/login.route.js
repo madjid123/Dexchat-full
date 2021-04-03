@@ -15,7 +15,7 @@ app.post('/login', (req, res, next) => {
         if (!user)
             return res.status(200).json(info.message)
         else {
-            console.log(user)
+            console.log(__filename, user)
             req.login(user, err => { console.log(err) })
 
             res.redirect('/loggedin')
