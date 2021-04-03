@@ -6,27 +6,7 @@ const user = require('../model/User.model');
 const mongoose = require('mongoose');
 
 router.get("/:id", async (req, res) => {
-    var User = await user.find({})
-    User.map(value => {
-
-        Contact.findOne({ name: value.name }, (err, res) => {
-            if (err) { console.log(err) }
-            if (!res) {
-                var contacts = new Contact({ name: value.name, SecondSide: value.id, firstSide: mongoose.Types.ObjectId(req.params.id) })
-                contacts.save()
-            }
-        })
-    })
-    var Contacts = await Contact.find({
-        $or: [
-            { firstSide: req.params.id },
-            { secondSide: req.params.id }
-        ]
-    },
-        (err) => {
-            if (err) console.log(err)
-        })
-    res.json({ Contacts: Contacts })
+    res.json("")
 
 })
 
@@ -35,13 +15,38 @@ router.post("/:id/send", async (req, res) => {
     var Message = new messages({ message: req.body.msg })
 
 })
+router.get('/contacts/:id', (req, res) => {
+    user.find({}, (err, users) => {
+        if (err) console.log(err)
+        users.map(value => {
+            Contact.findOne({ id: { $eq: value.name } }, (err, resu) => {
+                if (err) { console.log(err) }
+                if (!resu) {
+                    console.log("id", req.params.id)
+                    var contacts = new Contact({ name: value.name, SecondSide: value.id, firstSide: mongoose.Types.ObjectId(req.params.id) })
+                    contacts.save()
+                }
+            })
+        })
+    })
+    Contact.find({
+        $or: [
+            { firstSide: req.params.id },
+            { SecondSide: req.params.id }
+        ]
+    },
+        (err, resp) => {
+            if (err) console.log(err)
+            res.json({ Contacts: resp })
+        })
+
+})
 app.use("/user", (req, res, next) => {
 
     if (req.isAuthenticated()) {
         next()
     }
     else {
-        console.log(req.session)
         return res.json("You must Sign in")
 
     }

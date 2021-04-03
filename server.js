@@ -8,7 +8,7 @@ var keys = require('./config/keys')
 require('./model/User.model')
 require('./model/Messages.model')
 require('./model/Contact.model')
-const https = require('http')
+const https = require('https')
 
 
 
@@ -24,7 +24,15 @@ const io = require('socket.io')(Server, {
 })
 
 io.on('connection', (socket) => {
-    socket.emit("hello", "madjid")
+    console.log("io connected")
+    socket.on('getmsg', (data) => {
+        socket.broadcast.to(data.id).emit('sendmsg', {
+            message: data.msg,
+            username: data.name,
+            toid: data.id
+        }
+        )
+    })
 })
 io.listen(5001)
 process.on("SIGINT", () => {
