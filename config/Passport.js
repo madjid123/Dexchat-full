@@ -20,7 +20,6 @@ module.exports = function (passport) {
             }, async (accessToken, refreshToken, profile, done) => {
                 // passport callback function
                 //check if user already exists in our db with the given profile ID
-                console.log(accessToken, refreshToken)
                 const newUser = {
                     googleId: profile.id,
                     name: profile.emails[0].value.split("@")[0],
@@ -72,4 +71,4 @@ module.exports = function (passport) {
 
         User.findById(id.id, (err, user) => done(err, user))
     })
-}  
+}
