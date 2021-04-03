@@ -19,10 +19,9 @@ router.get('/contacts/:id', (req, res) => {
     user.find({}, (err, users) => {
         if (err) console.log(err)
         users.map(value => {
-            Contact.findOne({ id: { $eq: value.name } }, (err, resu) => {
+            Contact.findOne({ $or: [{ firstSide: value.id }, { SecondSide: value.id }] }, (err, resu) => {
                 if (err) { console.log(err) }
                 if (!resu) {
-                    console.log("id", req.params.id)
                     var contacts = new Contact({ name: value.name, SecondSide: value.id, firstSide: mongoose.Types.ObjectId(req.params.id) })
                     contacts.save()
                 }

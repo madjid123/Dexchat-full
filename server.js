@@ -23,13 +23,19 @@ const io = require('socket.io')(Server, {
     }
 })
 
+var users = []
 io.on('connection', (socket) => {
     console.log("io connected")
-    socket.on('getmsg', (data) => {
-        socket.broadcast.to(data.id).emit('sendmsg', {
+    socket.on('sendusr', (user) => {
+        socket.join(user.id)
+        users[user.username] = user.id
+    })
+    console.log("users ", users)
+    socket.on('sendmsg', (data) => {
+        console.log("to id ", data)
+        socket.to(data.toid).emit('getmsg', {
             message: data.msg,
             username: data.name,
-            toid: data.id
         }
         )
     })
