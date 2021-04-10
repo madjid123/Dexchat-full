@@ -16,9 +16,11 @@ router.post("/:id/send", async (req, res) => {
 
 })
 router.get('/contacts/:id', (req, res) => {
+    var username = ''
     user.find({}, (err, users) => {
         if (err) console.log(err)
         users.map(value => {
+            if (value.id === req.params.id) username = value.name
             Contact.findOne({ $or: [{ firstSide: value.id }, { SecondSide: value.id }] }, (err, resu) => {
                 if (err) { console.log(err) }
                 if (!resu) {
@@ -32,7 +34,7 @@ router.get('/contacts/:id', (req, res) => {
         $or: [
             { firstSide: req.params.id },
             { SecondSide: req.params.id }
-        ]
+        ], $and: [{ name: { $ne: username } }]
     },
         (err, resp) => {
             if (err) console.log(err)
