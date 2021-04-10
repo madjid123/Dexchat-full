@@ -30,24 +30,17 @@ io.on('connection', (socket) => {
         socket.join(user.id)
         users[user.username] = user.id
     })
-    console.log("users ", users)
     socket.on('sendmsg', (data) => {
         console.log("to id ", data)
         socket.to(data.toid).emit('getmsg', {
             message: data.msg,
             username: data.name,
+            toid: data.toid
         }
         )
     })
 })
-io.on('sendmsg', (data) => {
-    console.log("to id ", data)
-    socket.to(data.toid).emit('getmsg', {
-        message: data.msg,
-        username: data.name,
-    }
-    )
-})
+
 io.listen(5001)
 process.on("SIGINT", () => {
     server.close((err) => { console.log(err.message) })
