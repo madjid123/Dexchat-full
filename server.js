@@ -40,6 +40,14 @@ io.on('connection', (socket) => {
         )
     })
 })
+io.on('sendmsg', (data) => {
+    console.log("to id ", data)
+    socket.to(data.toid).emit('getmsg', {
+        message: data.msg,
+        username: data.name,
+    }
+    )
+})
 io.listen(5001)
 process.on("SIGINT", () => {
     server.close((err) => { console.log(err.message) })
