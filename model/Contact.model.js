@@ -1,5 +1,9 @@
 const mongoose = require('mongoose')
 
+const ContactSide = new mongoose.Schema({
+    name: { type: String, required: true },
+    id: { type: mongoose.Schema.Types.ObjectId, required: true }
+})
 
 const ContactSchema = new mongoose.Schema({
     name: {
@@ -7,10 +11,10 @@ const ContactSchema = new mongoose.Schema({
         required: Boolean
     },
     firstSide: {
-        type: mongoose.Schema.Types.ObjectId, required: Boolean
+        type: ContactSide, required: true
     },
     SecondSide: {
-        type: mongoose.Schema.Types.ObjectId, required: Boolean
+        type: ContactSide, required: true
     }
 
 

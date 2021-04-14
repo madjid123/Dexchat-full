@@ -25,11 +25,14 @@ const io = require('socket.io')(Server, {
 
 var users = []
 io.on('connection', (socket) => {
-    console.log("io connected")
     socket.on('sendusr', (user) => {
-        socket.join(user.id)
-        users[user.username] = user.id
+        console.log(user)
+        if (user.me && user.me.username != '' && user.me.id !== '') {
+            socket.join(user.me.id)
+            users[user.me.username] = user.me.id
+        }
     })
+    console.log(users)
     socket.on('sendmsg', (data) => {
         console.log("to id ", data)
         socket.to(data.toid).emit('getmsg', {
@@ -43,7 +46,7 @@ io.on('connection', (socket) => {
 
 io.listen(5001)
 process.on("SIGINT", () => {
-    server.close((err) => { console.log(err.message) })
+    server.close((err) => { if (err) console.log(err.message) })
     mongoose.disconnect()
 
 })
