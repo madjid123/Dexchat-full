@@ -53,11 +53,6 @@ fs.readdir('./routes', (err, files) => {
 })
 
 
-
-
-
-
-
 app.get("/auth/google", passport.authenticate("google", {
     scope: ["profile", "email"]
 }), (req, res) => {
