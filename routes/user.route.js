@@ -1,57 +1,57 @@
-const app = require('./register.route');
-const router = require('express').Router();
-const Contact = require('../model/Contact.model')
-const messages = require('../model/Messages.model')
-const user = require('../model/User.model');
-const mongoose = require('mongoose');
+const app = require("./register.route");
+const router = require("express").Router();
+const Room = require("../model/Room");
+const Message = require("../model/Message");
+const user = require("../model/User");
+const mongoose = require("mongoose");
 
 router.get("/:id", async (req, res) => {
-    res.json("")
-
-})
+  res.json("");
+});
 
 router.post("/:id/send", async (req, res) => {
-    const senderId = req.params.id
-    var Message = new messages({ message: req.body.msg })
+  const senderId = req.params.id;
+  var message = new Message({
+    message: req.body.msg,
+  });
+});
+router.get("/contacts/:id", async (req, res) => {
+  try {
+    var username = "";
+    const users = await user.find({});
+    users.map(async (value) => {
+      if (value._id === req.params.id) username = value.name;
 
-})
-router.get('/contacts/:id', (req, res) => {
-    var username = ''
-    user.find({}, (err, users) => {
-        if (err) console.log(err)
-        users.map(value => {
-            if (value.id === req.params.id) username = value.name
-            Contact.findOne({ $or: [{ firstSide: value.id }, { SecondSide: value.id }] }, (err, resu) => {
-                if (err) { console.log(err) }
-                if (!resu) {
-                    var contacts = new Contact({ name: value.name, SecondSide: value.id, firstSide: mongoose.Types.ObjectId(req.params.id) })
-                    contacts.save()
-                }
-            })
-        })
-    })
-    Contact.find({
-        $or: [
-            { firstSide: req.params.id },
-            { SecondSide: req.params.id }
-        ], $and: [{ name: { $ne: username } }]
-    },
-        (err, resp) => {
-            if (err) console.log(err)
-            res.json({ Contacts: resp })
-        })
+      const room = await Room.find({
+        "members._id": req.params.id,
+      });
+      if (!room) {
+        var newRoom = new Room({ members: [] });
+        newRoom.members.push(req.params.id);
+        newRoom.members.push(value._id);
+        await newRoom.save();
+      }
+    });
 
-})
+    const rooms = await Room.find({
+      "members._id": req.params.id,
+    }).populate("members");
+    res.json({
+      Rooms: rooms,
+    });
+  } catch (err) {
+    console.log(err);
+    res.json({
+      err: err.message,
+    });
+  }
+});
 app.use("/user", (req, res, next) => {
-
-    if (req.isAuthenticated()) {
-        next()
-    }
-    else {
-        return res.json("You must Sign in")
-
-    }
-
-})
-app.use('/user', router)
-module.exports = app
+  if (req.isAuthenticated()) {
+    next();
+  } else {
+    return res.json("You must Sign in");
+  }
+});
+app.use("/user", router);
+module.exports = app;
