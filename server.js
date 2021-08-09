@@ -48,4 +48,5 @@ process.on("SIGINT", () => {
     if (err) console.log(err.message);
   });
   mongoose.disconnect();
+  process.exit(1)
 });
