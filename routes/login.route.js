@@ -13,7 +13,7 @@ app.post("/login", (req, res, next) => {
     },
     (err, user, info) => {
       if (err) console.log(err);
-      if (!user) return res.status(401).json({err : info.message});
+      if (!user) return res.status(409).json(info.message);
       else {
         req.login(user, (err) => {
           console.log(err);
