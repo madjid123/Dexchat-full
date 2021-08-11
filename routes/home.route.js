@@ -1,13 +1,9 @@
-require('dotenv').config()
-const app = require('express').Router()
+require("dotenv").config();
+const app = require("express").Router();
+const isAuth = require("./middlewares");
 
+app.get("/", (req, res, next) => {
+  res.json("Welcome " + req.user ? "" : `${req.username}`);
+});
 
-
-app.get('/', (req, res) => {
-
-
-    res.json("Welcome " + (req.session.passport.user.name === undefined) ? "" : `${req.session.user}`)
-})
-
-
-module.exports = app
+module.exports = app;

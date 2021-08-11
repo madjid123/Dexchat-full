@@ -25,7 +25,6 @@ const io = require("socket.io")(Server, {
 var users = [];
 io.on("connection", (socket) => {
   socket.on("sendusr", (user) => {
-    console.log(user);
     if (user.me && user.me.username != "" && user.me.id !== "") {
       socket.join(user.me.id);
       users[user.me.username] = user.me.id;
@@ -48,5 +47,5 @@ process.on("SIGINT", () => {
     if (err) console.log(err.message);
   });
   mongoose.disconnect();
-  process.exit(1)
+  process.exit(1);
 });

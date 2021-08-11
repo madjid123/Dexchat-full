@@ -5,28 +5,13 @@ var keys = require("./config/keys");
 const fs = require("fs");
 
 const mongoose = require("mongoose");
-const passport = require("passport");
-require("./config/Passport")(passport);
+const passport = require("./config/Passport");
+
 const session = require("express-session");
 const MongoStore = require("connect-mongodb-session")(session);
 
-const store = new MongoStore({
-  uri: keys.mongodb.dbURI,
-  collection: "sessions",
-});
-app.use(
-  session({
-    secret: process.env.SESSION_TOKEN,
-    resave: true,
-    saveUninitialized: true,
-
-    store,
-  })
-);
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-
-app.use(passport, () => {});
 
 mongoose.connect(
   keys.mongodb.dbURI,
@@ -38,12 +23,28 @@ mongoose.connect(
   }
 );
 
+//configuring our session to increase the timeout of the connection
+
+const store = new MongoStore({
+  uri: keys.mongodb.dbURI,
+  collection: "sessions",
+});
+app.use(
+  session({
+    secret: process.env.SESSION_TOKEN,
+    resave: true,
+    saveUninitialized: true,
+    rolling: true,
+    store,
+  })
+);
+app.use(passport, () => {});
 app.use(passport.initialize());
 app.use(passport.session());
 
 app.use(
   require("cors")({
-    origin: ["*"],
+    origin: ["*", "http://localhost:3000"],
     methods: ["GET", "POST"],
     credentials: true, // enable set cookie
   })
@@ -53,7 +54,7 @@ app.use("/", require("./routes/register.route"));
 fs.readdir("./routes", (err, files) => {
   files.filter((file) => {
     file = file.slice(0, file.length - 3);
-    app.use("/", require("./routes/" + file));
+    //app.use("/", require("./routes/" + file));
     app.use(require("./routes/" + file));
   });
 });
@@ -82,5 +83,4 @@ app.get(
 const Router = express.Router();
 
 app.use(Router);
-
 module.exports = { app, db: mongoose };
