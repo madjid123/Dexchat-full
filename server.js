@@ -30,9 +30,7 @@ io.on("connection", (socket) => {
       users[user.me.username] = user.me.id;
     }
   });
-  console.log(users);
   socket.on("sendmsg", (data) => {
-    console.log("to id ", data);
     socket.to(data.toid).emit("getmsg", {
       message: data.msg,
       username: data.name,

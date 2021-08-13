@@ -17,25 +17,25 @@ router.post("/:id/send", async (req, res) => {
 });
 router.get("/contacts/:id", async (req, res) => {
   try {
-    var username = "";
     const users = await user.find({});
+    var username;
     users.map(async (value) => {
       if (value._id === req.params.id) username = value.name;
-
       const room = await Room.find({
-        "members._id": req.params.id,
+        members: { $in: { _id: [req.params.id] } },
       });
-      if (!room) {
+      console.log("room", room);
+      if (room.length === 0) {
         var newRoom = new Room({ members: [] });
         newRoom.members.push(req.params.id);
         newRoom.members.push(value._id);
         await newRoom.save();
+        return;
       }
     });
 
-    const rooms = await Room.find({
-      "members._id": req.params.id,
-    }).populate("members");
+    const rooms = await Room.find({}).populate("members");
+
     res.json({
       Rooms: rooms,
     });
