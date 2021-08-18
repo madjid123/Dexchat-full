@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 var MessageSchema = new mongoose.Schema({
   contact: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Contact",
+    ref: "Room",
     required: Boolean,
   },
   sender: {
