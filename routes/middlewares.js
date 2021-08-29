@@ -1,7 +1,6 @@
 const express = require("express");
 
 const isAuth = (req, res, next) => {
-  console.log("isAuth", req.session.passport);
   if (req.isAuthenticated()) {
     return next();
   } else {

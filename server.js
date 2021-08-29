@@ -1,16 +1,14 @@
-require("dotenv").config();
+const dotenv = require("dotenv");
+dotenv.config();
 
 const { app } = require("./app");
 const mongoose = require("mongoose");
 
 var keys = require("./config/keys");
 
-require("./model/User");
-require("./model/Message");
-require("./model/Room");
 const https = require("https");
 
-const server = app.listen(5000, () => {
+const server = app.listen(process.env.PORT || 5000, () => {
   console.log("app is running on port 5000");
 });
 const Server = https.createServer(app);
@@ -21,26 +19,35 @@ const io = require("socket.io")(Server, {
     methods: ["GET", "POST"],
   },
 });
-
 var users = [];
+const addUser = (username, socketID) => {
+  if (!users.some((user) => user[username] === socketID)) {
+    users[username] = socketID;
+  }
+};
 io.on("connection", (socket) => {
-  socket.on("sendusr", (user) => {
-    if (user.me && user.me.username != "" && user.me.id !== "") {
-      socket.join(user.me.id);
-      users[user.me.username] = user.me.id;
-    }
+  const id = socket.handshake.query.id;
+  socket.on("sendusr", (data) => {
+    if (!data.roomId) return;
+    const user = data.user;
+    addUser(user._id, data.roomId);
   });
   socket.on("sendmsg", (data) => {
-    socket.to(data.toid).emit("getmsg", {
+    console.log(socket.rooms);
+    console.log(users);
+    console.log(data);
+    socket.broadcast.to(users[data.toid]).emit("getmsg", {
       message: data.msg,
       username: data.name,
       toid: data.toid,
+      from: data.from,
     });
   });
 });
 
 io.listen(5001);
 process.on("SIGINT", () => {
+  io.close();
   server.close((err) => {
     if (err) console.log(err.message);
   });
