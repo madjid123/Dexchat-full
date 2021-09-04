@@ -30,18 +30,23 @@ io.on("connection", (socket) => {
   socket.on("sendusr", (data) => {
     if (!data.roomId) return;
     const user = data.user;
+    socket.auth = user;
     addUser(user._id, data.roomId);
   });
   socket.on("sendmsg", (data) => {
     console.log(socket.rooms);
     console.log(users);
     console.log(data);
-    socket.broadcast.to(users[data.toid]).emit("getmsg", {
+    socket.volatile.to(users[data.toid]).emit("getmsg", {
       message: data.msg,
       username: data.name,
       toid: data.toid,
       from: data.from,
     });
+  });
+  socket.on("disconnect", (reason) => {
+    console.log("Disconnected");
+    console.log(reason);
   });
 });
 
