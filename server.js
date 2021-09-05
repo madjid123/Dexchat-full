@@ -39,9 +39,11 @@ io.on("connection", (socket) => {
     console.log(data);
     socket.volatile.to(users[data.toid]).emit("getmsg", {
       message: data.msg,
+
       username: data.name,
       toid: data.toid,
       from: data.from,
+      fromId: data.fromId,
     });
   });
   socket.on("disconnect", (reason) => {
