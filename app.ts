@@ -1,21 +1,19 @@
 require("dotenv").config();
-var express = require("express");
+import express from "express";
 var app = express();
-var keys = require("./config/keys");
-const fs = require("fs");
-
-const mongoose = require("mongoose");
-const passport = require("./config/Passport");
-
-const session = require("express-session");
-const MongoStore = require("connect-mongodb-session")(session);
+import keys from "./config/keys"
+import fs from "fs"
+import mongoose from "mongoose";
+import passport from "./config/Passport";
+import Passport from "passport"
+import session, { Session } from "express-session";
+const MongoStore = require("connect-mongodb-session")(session)
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-
 mongoose.connect(
   keys.mongodb.dbURI,
-  { useNewUrlParser: true, useUnifiedTopology: true, skipCache: true },
+  { useNewUrlParser: true, useUnifiedTopology: true, },
   (err) => {
     if (err) console.log("mongoose ERR : ", err.message);
 
@@ -24,21 +22,21 @@ mongoose.connect(
 );
 
 //configuring our session to increase the timeout of the connection
-
-const store = new MongoStore({
+const store: any = new MongoStore({
   uri: keys.mongodb.dbURI,
   collection: "sessions",
-});
+})
+
 app.use(
   session({
-    secret: process.env.SESSION_TOKEN,
+    secret: process.env.SESSION_TOKEN as string,
     resave: true,
     saveUninitialized: true,
     rolling: true,
     store,
   })
 );
-app.use(passport, () => {});
+//app.use(passport.use, () => { });
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -55,16 +53,15 @@ fs.readdir("./routes", (err, files) => {
   files.filter((file) => {
     file = file.slice(0, file.length - 3);
     //app.use("/", require("./routes/" + file));
-    app.use(require("./routes/" + file));
+    app.use(require("./routes/" + file), (res, req, next) => { next() });
   });
 });
-
 app.get(
   "/auth/google",
   passport.authenticate("google", {
     scope: ["profile", "email"],
   }),
-  (req, res) => {}
+  (req, res) => { }
 );
 
 app.get("/auth/google/redirect", (req, res) => {
@@ -83,4 +80,5 @@ app.get(
 const Router = express.Router();
 
 app.use(Router);
-module.exports = { app, db: mongoose };
+//module.exports = { app, db: mongoose };
+export default app

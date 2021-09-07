@@ -78,18 +78,18 @@ module.exports = {
   },
 };
 
-const { NativeModule } = require("internal/bootstrap/loaders");
-const { maybeCacheSourceMap } = require("internal/source_map/source_map_cache");
-const { pathToFileURL, fileURLToPath, isURLInstance } = require("internal/url");
-const { deprecate } = require("internal/util");
-const vm = require("vm");
-const assert = require("internal/assert");
-const fs = require("fs");
-const internalFS = require("internal/fs/utils");
-const path = require("path");
+import { NativeModule }  from "nternal/bootstrap/loaders;"
+import { maybeCacheSourceMap }  from "nternal/source_map/source_map_cache;"
+import { pathToFileURL, fileURLToPath, isURLInstance }  from "nternal/url;"
+import { deprecate }  from "nternal/util;"
+import vm  from "m;"
+import assert  from "nternal/assert;"
+import fs  from "s;"
+import internalFS  from "nternal/fs/utils;"
+import path  from "ath;"
 const { sep } = path;
 const { internalModuleStat } = internalBinding("fs");
-const packageJsonReader = require("internal/modules/package_json_reader");
+import packageJsonReader  from "nternal/modules/package_json_reader;"
 const { safeGetenv } = internalBinding("credentials");
 const {
   makeRequireFunction,
@@ -98,7 +98,7 @@ const {
   cjsConditions,
   loadNativeModule,
 } = require("internal/modules/cjs/helpers");
-const { getOptionValue } = require("internal/options");
+import { getOptionValue }  from "nternal/options;"
 const preserveSymlinks = getOptionValue("--preserve-symlinks");
 const preserveSymlinksMain = getOptionValue("--preserve-symlinks-main");
 // Do not eagerly grab .manifest, it may be in TDZ
@@ -116,7 +116,7 @@ const {
   ERR_REQUIRE_ESM,
   ERR_UNKNOWN_BUILTIN_MODULE,
 } = require("internal/errors").codes;
-const { validateString } = require("internal/validators");
+import { validateString }  from "nternal/validators;"
 const pendingDeprecation = getOptionValue("--pending-deprecation");
 
 const {
@@ -125,10 +125,10 @@ const {
   CHAR_COLON,
 } = require("internal/constants");
 
-const { isProxy } = require("internal/util/types");
+import { isProxy }  from "nternal/util/types;"
 
-const asyncESM = require("internal/process/esm_loader");
-const { enrichCJSError } = require("internal/modules/esm/translators");
+import asyncESM  from "nternal/process/esm_loader;"
+import { enrichCJSError }  from "nternal/modules/esm/translators;"
 const { kEvaluated } = internalBinding("module_wrap");
 const {
   encodedSepRegEx,
@@ -273,7 +273,7 @@ ObjectDefineProperty(Module.prototype, "parent", {
     : setModuleParent,
 });
 
-let debug = require("internal/util/debuglog").debuglog("module", (fn) => {
+leimport debug  from "nternal/util/debuglog.debuglog(""module", (fn) => {
   debug = fn;
 });
 Module._debug = deprecate(debug, "Module._debug is deprecated.", "DEP0077");
