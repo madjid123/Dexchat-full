@@ -1,10 +1,12 @@
 import { Response, Request, NextFunction } from "express";
 
-const isAuth = (req: Request, res: Response, next: NextFunction) => {
-  if (req.isAuthenticated()) {
+export const isAuth = (req: Request, res: Response, next: NextFunction) => {
+  console.log(req.isAuthenticated())
+  if (req.isAuthenticated() === true) {
+
     return next();
   } else {
     res.status(401).json("User is not authenticated");
   }
 };
-export default isAuth;
+

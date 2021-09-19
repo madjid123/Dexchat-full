@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import keys from "./keys";
 import GoogleStrategy from "passport-google-oauth20";
-import User, { UserSchema } from "../model/User";
+import User, { UserType } from "../model/User";
 import LocalStrategy from "passport-local";
 import sha256 from "js-sha256";
 import passport from "passport";
@@ -30,7 +30,7 @@ passport.use(
             name: profile.emails.at(0)?.value.split("@")[0],
             email: profile.emails.at(0)?.value,
             googleId: profile.id,
-          } as UserSchema;
+          } as UserType;
           let user = await User.findOne({ googleId: profile.id });
           let _user;
           if (user) {
@@ -57,7 +57,7 @@ passport.use(
     },
     function (username, password, done) {
       password = sha256.sha256(password);
-      User.findOne({ email: username }, (err: mongoose.CallbackError, user: UserSchema) => {
+      User.findOne({ email: username }, (err: mongoose.CallbackError, user: UserType) => {
         if (err) {
           return done(err);
         }

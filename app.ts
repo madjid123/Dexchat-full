@@ -8,6 +8,7 @@ import passport from "./config/Passport";
 import Passport from "passport"
 import session, { Session } from "express-session";
 const MongoStore = require("connect-mongodb-session")(session)
+// import MongoStore from "connect-mongo"
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -30,10 +31,15 @@ const store: any = new MongoStore({
 app.use(
   session({
     secret: process.env.SESSION_TOKEN as string,
-    resave: true,
-    saveUninitialized: true,
+    resave: false,
+    saveUninitialized: false,
     rolling: true,
-    store,
+    store: store
+    //   store: MongoStore.create(
+    //     {
+    //       mongoUrl: keys.mongodb.dbURI,
+    //       autoRemove: "native"
+    //     })
   })
 );
 //app.use(passport.use, () => { });
@@ -48,7 +54,7 @@ app.use(
   })
 );
 
-app.use("/", require("./routes/register.route"));
+//app.use("/", require("./routes/register"));
 fs.readdir("./routes", (err, files) => {
   files.filter((file) => {
     file = file.slice(0, file.length - 3);

@@ -7,7 +7,7 @@ import mongoose from "mongoose";
 import keys from "./config/keys";
 
 import https from "https";
-
+import { MessageType } from "./model/Message";
 const server = app.listen(process.env.PORT || 5000, () => {
   console.log("app is running on port 5000");
 });
@@ -37,13 +37,10 @@ io.on("connection", (socket) => {
     console.log(socket.rooms);
     console.log(users);
     console.log(data);
-    socket.volatile.to(users[data.toid]).emit("getmsg", {
-      message: data.msg,
-
-      username: data.name,
-      toid: data.toid,
-      from: data.from,
-      fromId: data.fromId,
+    const message = data.message as MessageType
+    console.log(message.Receiver.id)
+    socket.volatile.to(users[message.Receiver.id as any]).emit("getmsg", {
+      message: message
     });
   });
   socket.on("disconnect", (reason) => {

@@ -1,13 +1,13 @@
 import mongoose from 'mongoose'
 
-export interface UserSchema extends mongoose.Document {
+export interface UserType extends mongoose.Document {
     name: string,
     email: string,
     password: string,
     googleId: string,
 
 }
-const userSchema = new mongoose.Schema<UserSchema>({
+const userSchema = new mongoose.Schema<UserType>({
     name: {
         type: String,
         required: Boolean
@@ -28,4 +28,4 @@ const userSchema = new mongoose.Schema<UserSchema>({
 
 
 
-export default mongoose.model<UserSchema>('User', userSchema)
+export default mongoose.model<UserType>('User', userSchema)
