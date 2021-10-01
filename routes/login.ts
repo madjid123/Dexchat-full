@@ -1,11 +1,11 @@
-import { Router } from "express";
+import express, { Router } from "express";
 import passport from "passport";
 import sha256 from "sha256";
 import User from "../model/User";
 import { body, validationResult } from "express-validator"
-const app = Router()
-app.post("/login",
-  body("email").isEmail().normalizeEmail(),
+const router = Router()
+const app = express()
+router.post("/login",
   body("password").isAlphanumeric(),
   async (req, res, next) => {
     const errors = validationResult(req);
@@ -16,11 +16,12 @@ app.post("/login",
         })
       })
     }
+    console.log(req.body)
     passport.authenticate(
       "local",
       {
-        successRedirect: "/login",
-        failureRedirect: "/login",
+        successRedirect: "/auth/login",
+        failureRedirect: "/auth/login",
         failureFlash: true,
       },
       (err, user, info) => {
@@ -37,7 +38,7 @@ app.post("/login",
     )(req, res, next);
   });
 
-app.get("/logout", async (req, res, next) => {
+router.get("/logout", async (req, res, next) => {
   req.session.destroy((err) => {
     if (err) console.log(err.message)
   });
@@ -46,11 +47,33 @@ app.get("/logout", async (req, res, next) => {
   res.json("logged out successfully");
 });
 
-app.get("/login", (req, res, next) => {
+router.get("/login", (req, res, next) => {
   if (req.isAuthenticated()) {
     res.json(req.user);
   } else {
     res.status(401).json("Not logged in");
   }
 });
+router.get(
+  "/google",
+  passport.authenticate("google", {
+    scope: ["profile", "email"],
+  }),
+  (req, res) => { }
+);
+
+router.get("/google/redirect", (req, res) => {
+  res.redirect("/auth/login");
+});
+router.get("/failedGoogleLogin", (req, res) => {
+  res.status(401).json({ error: "Failed to login using google" });
+});
+router.get(
+  "/google/callback",
+  passport.authenticate("google", { failureRedirect: "/auth/failedGoogleLogin" }),
+  function (req, res) {
+    res.redirect("/");
+  }
+);
+app.use("/auth", router)
 module.exports = app;

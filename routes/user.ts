@@ -42,7 +42,7 @@ router.get("/contacts/:id", async (req, res, next) => {
 
     const rooms = await Room.find({
       members: { $in: [mongoose.Types.ObjectId(req.params.id)] },
-    }).populate("members", "name _id");
+    }).populate("members", "username _id");
     res.json({
       Rooms: rooms,
     });

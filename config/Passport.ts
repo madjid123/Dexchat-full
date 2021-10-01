@@ -17,28 +17,28 @@ passport.use(
     {
       clientID: keys.google.GOOGLE_CLIENT_ID,
       clientSecret: keys.google.GOOGLE_CLIENT_SECRET,
-      callbackURL: "http://fkrdm.com:5000/auth/google/callback",
+      callbackURL: "http://localhost:5000/auth/google/callback",
     },
     async (accessToken, refreshToken, profile, done) => {
       // passport callback function
-      //check if user already exists in our db with the given profile ID
+      //check if user already exists in db with the given profile ID
 
 
       try {
         if (profile !== undefined && profile.emails !== undefined) {
           const newUser = {
-            name: profile.emails.at(0)?.value.split("@")[0],
+            username: profile.emails.at(0)?.value.split("@")[0],
             email: profile.emails.at(0)?.value,
             googleId: profile.id,
           } as UserType;
           let user = await User.findOne({ googleId: profile.id });
           let _user;
-          if (user) {
-            _user = { name: user?.name, id: user.id };
+          if (user !== null) {
+            _user = { username: user?.username, id: user._id };
             done(null, _user);
           } else {
             _user = await User.create(newUser);
-            _user = { name: _user.name, id: _user.id };
+            _user = { name: _user.username, id: _user._id };
             done(null, _user);
           }
         }
@@ -52,12 +52,12 @@ passport.use(
 passport.use(
   new LocalStrategy.Strategy(
     {
-      usernameField: "email",
+      usernameField: "username",
       passwordField: "password",
     },
     function (username, password, done) {
       password = sha256.sha256(password);
-      User.findOne({ email: username }, (err: mongoose.CallbackError, user: UserType) => {
+      User.findOne({ username: username }, (err: mongoose.CallbackError, user: UserType) => {
         if (err) {
           return done(err);
         }

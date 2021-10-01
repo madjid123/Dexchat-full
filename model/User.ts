@@ -1,14 +1,14 @@
 import mongoose from 'mongoose'
 
 export interface UserType extends mongoose.Document {
-    name: string,
+    username: string,
     email: string,
     password: string,
     googleId: string,
 
 }
 const userSchema = new mongoose.Schema<UserType>({
-    name: {
+    username: {
         type: String,
         required: Boolean
     },
