@@ -62,27 +62,7 @@ fs.readdir("./routes", (err, files) => {
     app.use(require("./routes/" + file), (res, req, next) => { next() });
   });
 });
-app.get(
-  "/auth/google",
-  passport.authenticate("google", {
-    scope: ["profile", "email"],
-  }),
-  (req, res) => { }
-);
 
-app.get("/auth/google/redirect", (req, res) => {
-  res.redirect("/");
-});
-app.get("/failedGoogleLogin", (req, res) => {
-  res.json("Failed to login using google");
-});
-app.get(
-  "/auth/google/callback",
-  passport.authenticate("google", { failureRedirect: "/failedGoogleLogin" }),
-  function (req, res) {
-    res.redirect("/");
-  }
-);
 const Router = express.Router();
 
 app.use(Router);
