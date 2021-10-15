@@ -11,7 +11,7 @@ app.post("/register",
     }
 
   }),
-  body("username").isAlphanumeric().trim().custom(async value => {
+  body("username").notEmpty().isAlphanumeric().trim().custom(async value => {
     const exists = await User.exists({ name: value })
     if (exists) {
       return Promise.reject("Username already in use !")
@@ -27,7 +27,7 @@ app.post("/register",
       }
       const { email, username, password } = req.body
 
-      var newUser = new User({ name: username, email, password: sha256(password) });
+      var newUser = new User({ username: username, email, password: sha256(password) });
       newUser.save();
       return res.json({ response: "User successfully created", name: username });
 

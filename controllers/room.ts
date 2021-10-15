@@ -5,7 +5,6 @@ export const RoomSendMessage = async (req: Request, res: Response, next: NextFun
 	try {
 		const room_id = req.params.room_id
 		const message = req.body as MessageType
-		console.log("message", req.body)
 		const NewMessage = new Message(message)
 		await NewMessage.validate()
 		await NewMessage.save()

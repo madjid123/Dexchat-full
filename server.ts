@@ -26,6 +26,9 @@ const addUser = (username: any, socketID: any) => {
     users[username] = socketID;
   }
 };
+const removeUser = (socketID: string) => {
+  users = users.map((user, idx) => { if (idx !== users.indexOf(socketID)) return user })
+}
 io.on("connection", (socket) => {
   const id = socket.handshake.query.id;
   socket.on("sendusr", (data) => {
@@ -33,19 +36,23 @@ io.on("connection", (socket) => {
     const user = data.user;
     addUser(user._id, data.roomId);
   });
+  console.log("users connected  :", users)
   socket.on("sendmsg", (data) => {
-    console.log(socket.rooms);
-    console.log(users);
-    console.log(data);
     const message = data.message as MessageType
-    console.log(message.Receiver.id)
     socket.volatile.to(users[message.Receiver.id as any]).emit("getmsg", {
       message: message
     });
   });
+  socket.on("typing", (data) => {
+    console.log(data)
+    socket.to(users[data.Receiver]).emit("typing", data.Sender)
+  })
   socket.on("disconnect", (reason) => {
+
     console.log("Disconnected");
     console.log(reason);
+    removeUser(socket.id)
+    console.log(users)
   });
 });
 
