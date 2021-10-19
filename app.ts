@@ -11,6 +11,7 @@ const MongoStore = require("connect-mongodb-session")(session)
 // import MongoStore from "connect-mongo"
 
 app.use(express.urlencoded({ extended: true }));
+
 app.use(express.json());
 mongoose.connect(
   keys.mongodb.dbURI,
