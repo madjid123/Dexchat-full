@@ -8,6 +8,7 @@
     "dev": "   nodemon --exec ts-node server.ts"
   },
   "dependencies": {
+    "@emotion/styled": "^11.3.0",
     "@types/connect-mongodb-session": "^2.4.2",
     "@types/express-session": "^1.17.4",
     "@types/passport": "^1.0.7",
