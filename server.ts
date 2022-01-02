@@ -24,9 +24,11 @@ var users = [] as any[];
 const addUser = (username: any, socketID: any) => {
   if (!users.some((user) => user[username] === socketID)) {
     users[username] = socketID;
+    console.log("connceted users" , users)
   }
 };
 const removeUser = (socketID: string) => {
+  console.log(socketID)
   users = users.map((user, idx) => { if (idx !== users.indexOf(socketID)) return user })
 }
 io.on("connection", (socket) => {
@@ -36,7 +38,6 @@ io.on("connection", (socket) => {
     const user = data.user;
     addUser(user._id, data.roomId);
   });
-  console.log("users connected  :", users)
   socket.on("sendmsg", (data) => {
     const message = data.message as MessageType
     socket.volatile.to(users[message.Receiver.id as any]).emit("getmsg", {
@@ -44,7 +45,6 @@ io.on("connection", (socket) => {
     });
   });
   socket.on("typing", (data) => {
-    console.log(data)
     socket.to(users[data.Receiver]).emit("typing", data.Sender)
   })
   socket.on("disconnect", (reason) => {
