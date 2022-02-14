@@ -36,7 +36,8 @@ io.on("connection", (socket) => {
   socket.on("sendusr", (data) => {
     if (!data.roomId) return;
     const user = data.user;
-    addUser(user._id, data.roomId);
+    if (users.indexOf(data.roomID) !== user._id)
+      addUser(user._id, data.roomId);
   });
   socket.on("sendmsg", (data) => {
     const message = data.message as MessageType
