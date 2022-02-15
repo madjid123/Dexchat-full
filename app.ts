@@ -19,7 +19,7 @@ mongoose.connect(
   (err) => {
     if (err) console.log("mongoose ERR : ", err.message);
 
-    console.log("Connected to mongodb atlas ");
+    console.log("Connected to mongodb server");
   }
 );
 

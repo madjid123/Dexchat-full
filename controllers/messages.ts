@@ -18,9 +18,13 @@ export const getMessages = async (req: Request, res: Response, next: NextFunctio
 		const messages_count = await Message.find({ Room: { id: Room_id } }).countDocuments()
 		page = (Querypage.length !== 0) ? parseInt(Querypage) : 1
 		const Pages = Math.ceil(messages_count / PER_PAGE)
-
+		let offset = messages_count - PER_PAGE*page
+		if(offset < 0){
+			Limit = messages_count % PER_PAGE
+			offset = 0
+		}
 		const messages = await Message.find({ Room: { id: Room_id } })
-			.skip((messages_count > PER_PAGE && page < Pages) ? (messages_count - PER_PAGE * page) : 0)
+			.skip(offset)
 			.limit(Limit)
 
 		res.json({
