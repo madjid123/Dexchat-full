@@ -5,10 +5,8 @@ import keys from "./config/keys"
 import fs from "fs"
 import mongoose from "mongoose";
 import passport from "./config/Passport";
-import Passport from "passport"
 import session, { Session } from "express-session";
 const MongoStore = require("connect-mongodb-session")(session)
-// import MongoStore from "connect-mongo"
 
 app.use(express.urlencoded({ extended: true }));
 
@@ -18,7 +16,6 @@ mongoose.connect(
   { useNewUrlParser: true, useUnifiedTopology: true, },
   (err) => {
     if (err) console.log("mongoose ERR : ", err.message);
-
     console.log("Connected to mongodb server");
   }
 );
