@@ -13,7 +13,6 @@ const server = app.listen(process.env.PORT || 5000, () => {
 });
 const Server = https.createServer(app);
 import socketio from "socket.io"
-import Room from "./model/Room";
 
 const io = new socketio.Server(Server, {
   cors: {
@@ -24,7 +23,6 @@ var users = [] as any[];
 const addUser = (username: any, socketID: any) => {
   if (!users.some((user) => user[username] === socketID)) {
     users[username] = socketID;
-    console.log("connceted users" , users)
   }
 };
 const removeUser = (socketID: string) => {
@@ -34,23 +32,23 @@ const removeUser = (socketID: string) => {
 io.on("connection", (socket) => {
   console.log("connection", socket.id) 
   socket.on("sendsocket", (data) => {
-    console.log(data)
-    if (!data.roomId) return;
+    if (!data.user) return;
     console.log("sendusr")
     const user = data.user;
-    console.log(users.indexOf(data.roomID))
     data.rooms.map((room:any)=>{socket.join(room)})
+    console.log(socket.rooms)
     if (users.indexOf(data.roomID) !== user._id)
       addUser(user._id, data.roomId);
   });
+  
   socket.on("sendmsg", (data) => {
     const message = data.message as MessageType
     // socket.volatile.to(users[message.Receiver.id as any]).emit("getmsg", {
     //   message: message
     // });
-    socket.to(message.Room.id as any).emit(`getmsg`, {message:message, room: message.Room.id})
+    console.log(message.Room.id)
+    socket.to(message.Room.id as any).emit(`getmsg:${message.Room.id}`, {message:message, room: message.Room.id})
   });
-
   socket.on("typing", (data) => {
     socket.to(users[data.Receiver]).emit("typing", data.Sender)
   })
