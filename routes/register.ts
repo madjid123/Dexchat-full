@@ -12,7 +12,7 @@ app.post("/register",
 
   }),
   body("username").notEmpty().isAlphanumeric().trim().custom(async value => {
-    const exists = await User.exists({ name: value })
+    const exists = await User.exists({ username: value })
     if (exists) {
       return Promise.reject("Username already in use !")
     }

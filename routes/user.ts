@@ -20,10 +20,10 @@ router.get("/contacts/:id", async (req, res, next) => {
     if (req.params.id === undefined) {
       return res.status(401).json("Must provide an id for this route");
     }
-    const User_id = mongoose.Types.ObjectId(req.params.id);
+    const User_id = new mongoose.Types.ObjectId(req.params.id);
     Users.filter(async (value) => {
       if (
-        mongoose.Types.ObjectId(value._id).toHexString() ===
+        new mongoose.Types.ObjectId(value._id).toHexString() ===
         User_id.toHexString()
       ) {
         return false;
@@ -33,7 +33,7 @@ router.get("/contacts/:id", async (req, res, next) => {
       });
       if (rooms.length === 0) {
         var newRoom = new Room({ members: [] });
-        newRoom.members.push(mongoose.Types.ObjectId(req.params.id));
+        newRoom.members.push(new mongoose.Types.ObjectId(req.params.id));
         newRoom.members.push(value._id);
         await newRoom.save();
         return;
@@ -41,7 +41,7 @@ router.get("/contacts/:id", async (req, res, next) => {
     });
 
     const rooms = await Room.find({
-      members: { $in: [mongoose.Types.ObjectId(req.params.id)] },
+      members: { $in: [new mongoose.Types.ObjectId(req.params.id)] },
     }).populate("members", "username _id");
     res.json({
       Rooms: rooms,

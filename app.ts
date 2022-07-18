@@ -13,7 +13,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 mongoose.connect(
   keys.mongodb.dbURI,
-  { useNewUrlParser: true, useUnifiedTopology: true, },
   (err) => {
     if (err) console.log("mongoose ERR : ", err.message);
     console.log("Connected to mongodb server");
