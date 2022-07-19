@@ -32,11 +32,7 @@ app.use(
     saveUninitialized: false,
     rolling: true,
     store: store
-    //   store: MongoStore.create(
-    //     {
-    //       mongoUrl: keys.mongodb.dbURI,
-    //       autoRemove: "native"
-    //     })
+
   })
 );
 //app.use(passport.use, () => { });
