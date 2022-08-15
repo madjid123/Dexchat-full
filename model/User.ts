@@ -25,6 +25,7 @@ const userSchema = new mongoose.Schema<UserType>({
     }
 }, { timestamps: true })
 
+userSchema.index({ useraname: 1 })
 
 
 
