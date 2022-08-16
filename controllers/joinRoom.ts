@@ -40,10 +40,19 @@ export const JoinRoomAcceptRequestFunction =
         try {
             const user_id = (req.user as PassportUserType)._id.toHexString()
             const { other_user_id } = req.params
-            const updateRes = await JoinRoomRequest.updateOne({
+            const joinRoomRequest = await JoinRoomRequest.findOne({
                 RequesterId: new mongoose.Types.ObjectId(other_user_id),
                 ReceiverId: new mongoose.Types.ObjectId(user_id),
-            }, { State: "Accepted" })
+            })
+            if (joinRoomRequest === null) {
+                res.status(400).send("there is No such request with this params")
+                return
+            }
+            if (joinRoomRequest.State !== "Pending")
+                await joinRoomRequest.update(
+                    { State: "Accepted" }
+                )
+
             const newroom = new Room(
                 {
                     members: [
