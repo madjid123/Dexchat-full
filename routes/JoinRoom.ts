@@ -1,11 +1,31 @@
 import express from "express"
-import { JoiningRoomRequestFunction } from "../controllers/joinRoom"
+import { PassportUserType } from "../config/Passport"
+import {
+    JoinRoomRequestFunction,
+    JoinRoomRemoveRequestFunction,
+    JoinRoomAcceptRequestFunction,
+    JoinRoomRejectRequestFunction
+} from "../controllers/joinRoom"
 import { isAuth } from "./middlewares"
 
 const app = express()
 const router = express.Router()
-router.get("/:user_id/request/:other_user_id", isAuth, JoiningRoomRequestFunction)
-router.get("/:user_id/accept/:other_user_id", isAuth, () => { })
-router.get("/:user_id/reject/:other_user_id", isAuth, () => { })
-app.use("/join_room", router)
+router.get("/request/:other_user_id", JoinRoomRequestFunction)
+router.get("/accept/:other_user_id", isAuth, JoinRoomAcceptRequestFunction)
+router.get("/reject/:other_user_id", isAuth, JoinRoomRejectRequestFunction)
+router.delete("/remove/:other_user_id", isAuth, JoinRoomRemoveRequestFunction)
+
+app.use("/join_room/:user_id", isAuth, async (req, res, next) => {
+    try {
+        if (req.params.user_id !== (req.user as PassportUserType)._id.toHexString()) {
+            res.status(500).send("Operation not allowed for this user")
+            return;
+        }
+        next()
+    } catch (e) {
+        const err = e as Error
+        console.error(err)
+    }
+})
+app.use("/join_room/:user_id", router)
 module.exports = app
