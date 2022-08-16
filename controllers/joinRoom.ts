@@ -43,13 +43,11 @@ export const JoinRoomAcceptRequestFunction =
             const joinRoomRequest = await JoinRoomRequest.findOne({
                 RequesterId: new mongoose.Types.ObjectId(other_user_id),
                 ReceiverId: new mongoose.Types.ObjectId(user_id),
+                State: "Pending"
             })
             if (joinRoomRequest === null) {
                 res.status(400).send("there is No such request with this params")
                 return
-            }
-            if (joinRoomRequest.State !== "Pending") {
-                res.status(400).send("Request already handled")
             }
             await joinRoomRequest.update(
                 { State: "Accepted" }
@@ -77,6 +75,17 @@ export const JoinRoomRejectRequestFunction =
         try {
             const user_id = (req.user as PassportUserType)._id.toHexString()
             const { other_user_id } = req.params
+            const joinRoomRequest = await JoinRoomRequest.findOne({
+                RequesterId: new mongoose.Types.ObjectId(other_user_id),
+                ReceiverId: new mongoose.Types.ObjectId(user_id),
+                State: "Pending"
+            })
+            if (joinRoomRequest === null) {
+                res.status(400).send("there is No such request with this params")
+                return
+            }
+            await joinRoomRequest.update({ State: "Rejected" })
+            res.send("Rejecting Request done successfully")
         } catch (e) {
             const err = e as Error
             console.error(err)
