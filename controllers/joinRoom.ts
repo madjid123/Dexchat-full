@@ -48,10 +48,12 @@ export const JoinRoomAcceptRequestFunction =
                 res.status(400).send("there is No such request with this params")
                 return
             }
-            if (joinRoomRequest.State !== "Pending")
-                await joinRoomRequest.update(
-                    { State: "Accepted" }
-                )
+            if (joinRoomRequest.State !== "Pending") {
+                res.status(400).send("Request already handled")
+            }
+            await joinRoomRequest.update(
+                { State: "Accepted" }
+            )
 
             const newroom = new Room(
                 {
