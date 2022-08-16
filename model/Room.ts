@@ -12,6 +12,6 @@ const RoomSchema = new mongoose.Schema<RoomType>({
       required: true,
     },
   ],
-});
+}, { timestamps: true });
 
 export default mongoose.model<RoomType>("Room", RoomSchema);
