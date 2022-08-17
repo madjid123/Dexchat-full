@@ -16,7 +16,7 @@ export const JoinRoomRequestFunction =
 
             })
             if (requestExists !== null) {
-                res.status(404).send("request already exists")
+                res.status(404).send("Request already exists")
                 return;
 
             }
@@ -99,6 +99,18 @@ export const JoinRoomRemoveRequestFunction =
         try {
             const user_id = (req.user as PassportUserType)._id.toHexString()
             const { other_user_id } = req.params
+
+            const joinRoomRequest = await JoinRoomRequest.findOne({
+                RequesterId: new mongoose.Types.ObjectId(user_id),
+                ReceiverId: new mongoose.Types.ObjectId(other_user_id),
+                State: "Pending"
+            })
+            if (joinRoomRequest == null) {
+                res.status(400).send("No such request with this params")
+                return
+            }
+            await joinRoomRequest.remove()
+            res.send("Removing request done successfully")
 
         } catch (e) {
             const err = e as Error
