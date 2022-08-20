@@ -8,12 +8,12 @@ import {
 } from "../controllers/joinRoom"
 import { isAuth } from "./middlewares"
 
-const app = express()
+export const app = express()
 const router = express.Router()
 router.get("/request/:other_user_id", JoinRoomRequestFunction)
-router.get("/accept/:other_user_id", isAuth, JoinRoomAcceptRequestFunction)
-router.get("/reject/:other_user_id", isAuth, JoinRoomRejectRequestFunction)
-router.delete("/remove/:other_user_id", isAuth, JoinRoomRemoveRequestFunction)
+router.get("/accept/:other_user_id", JoinRoomAcceptRequestFunction)
+router.get("/reject/:other_user_id", JoinRoomRejectRequestFunction)
+router.delete("/remove/:other_user_id", JoinRoomRemoveRequestFunction)
 
 app.use("/join_room/:user_id", isAuth, async (req, res, next) => {
     try {
