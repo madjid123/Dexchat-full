@@ -8,12 +8,17 @@ import { PassportUserType } from "../config/Passport";
 export const SearchForUserFunc = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const pattern = req.query.pattern
+        let p = ""
+        if (pattern === undefined) {
+            p = ".*"
+        } else
+            p = pattern as string
         const similarUsers = await User.find({
             username: {
                 $in: [
-                    new RegExp(`^${pattern}`, "i"),
-                    new RegExp(`${pattern}$`, "i"),
-                    new RegExp(`.*${pattern}.*`, "i"),
+                    new RegExp(`^${p}`, "i"),
+                    new RegExp(`${p}$`, "i"),
+                    new RegExp(`.*${p}.*`, "i"),
                 ]
             }
         }, "username email")
@@ -38,6 +43,11 @@ export const getAllUsers = async (req: Request, res: Response, next: NextFunctio
     try {
         const reqUser = req.user as PassportUserType
         const user_id = req.params.user_id
+        var pattern = req.query.pattern as string
+        if (pattern === undefined || pattern.length < 3) {
+            pattern = ".*"
+        }
+
         if (reqUser._id.toHexString() !== user_id) {
             throw new Error("Provided id is not the same as authenticated user id")
         }
@@ -51,7 +61,16 @@ export const getAllUsers = async (req: Request, res: Response, next: NextFunctio
 
         })
         nonConnectedUsers.users.push(new mongoose.Types.ObjectId(user_id))
-        const users = await User.find({ _id: { $nin: nonConnectedUsers.users } }, "_id username email")
+        const users = await User.find({
+            _id: { $nin: nonConnectedUsers.users },
+            username: {
+                $in: [
+                    new RegExp(`^${pattern}`, "i"),
+                    new RegExp(`${pattern}$`, "i"),
+                    new RegExp(`.*${pattern}.*`, "i"),
+                ]
+            }
+        }, "_id username email")
         res.send({ users: users })
 
     } catch (e) {
