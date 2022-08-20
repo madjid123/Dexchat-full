@@ -4,36 +4,6 @@ import User from "../model/User"
 import Room, { RoomType } from "../model/Room"
 import mongoose from "mongoose";
 import { PassportUserType } from "../config/Passport";
-// implements a response to /search "GET" request
-export const SearchForUserFunc = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-        const pattern = req.query.pattern
-        let p = ""
-        if (pattern === undefined) {
-            p = ".*"
-        } else
-            p = pattern as string
-        const similarUsers = await User.find({
-            username: {
-                $in: [
-                    new RegExp(`^${p}`, "i"),
-                    new RegExp(`${p}$`, "i"),
-                    new RegExp(`.*${p}.*`, "i"),
-                ]
-            }
-        }, "username email")
-        if (similarUsers.length === 0) {
-            res.status(404).send('No such user similar to this username')
-            return
-        }
-        res.status(200).send({ users: similarUsers })
-    } catch (e: any) {
-        const err = e as Error
-        console.error(err)
-        res.status(500).send(err)
-    }
-
-}
 type Users = {
     users: mongoose.Types.ObjectId[]
 }
