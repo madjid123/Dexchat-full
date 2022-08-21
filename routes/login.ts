@@ -1,10 +1,10 @@
 import express, { Router } from "express";
 import passport from "passport";
-import sha256 from "sha256";
-import User from "../model/User";
 import { body, validationResult } from "express-validator"
+
 const router = Router()
 const app = express()
+
 router.post("/login",
   body("password").isAlphanumeric(),
   async (req, res, next) => {
@@ -16,7 +16,6 @@ router.post("/login",
         })
       })
     }
-    console.log(req.body)
     passport.authenticate(
       "local",
       {
