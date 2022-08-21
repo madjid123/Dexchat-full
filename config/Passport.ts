@@ -58,7 +58,7 @@ passport.use(
         password = sha256.sha256(password);
         const user = await User.findOne({ username: username });
         if (!user) {
-          return done(null, false, { message: "Incorrect email." });
+          return done(null, false, { message: "Incorrect username." });
         }
         if (user.password != password) {
           return done(null, false, { message: "Incorrect password." });
