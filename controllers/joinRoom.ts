@@ -15,11 +15,27 @@ export const JoinRoomRequestFunction =
                 State: { $nin: ["Rejected"] }
 
             })
+            const roomExists = await Room.exists({
+                members: {
+                    $all:
+                        [
+                            new mongoose.Types.ObjectId(other_user_id),
+                            new mongoose.Types.ObjectId(user_id)
+                        ]
+
+                }
+            })
+            console.log(user_id, other_user_id)
+            console.log(roomExists)
+            if (roomExists !== null) {
+                res.status(404).send("You already have room together")
+                return;
+            }
             if (requestExists !== null) {
                 res.status(404).send("Request already exists")
                 return;
-
             }
+
             const joinRoomRequest = new JoinRoomRequest({
                 RequesterId: new mongoose.Types.ObjectId(user_id),
                 ReceiverId: new mongoose.Types.ObjectId(other_user_id),
