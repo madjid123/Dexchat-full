@@ -1,15 +1,18 @@
 
 import { Request, Response, NextFunction } from "express";
-import User from "../model/User"
+import User, { UserType } from "../model/User"
 import Room, { RoomType } from "../model/Room"
 import mongoose from "mongoose";
 import { PassportUserType } from "../config/Passport";
+import JoinRoomRequest from "../model/JoinRoomRequest";
 
 type Users = {
     users: mongoose.Types.ObjectId[]
 }
 // a recommendation system mockup
-
+type UserTypeExt = UserType & {
+    pendingRequest: boolean
+}
 export const getAllUsers = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const reqUser = req.user as PassportUserType
@@ -45,17 +48,31 @@ export const getAllUsers = async (req: Request, res: Response, next: NextFunctio
         }
 
 
-        const users = await User.find({
+        var users = await User.find({
             _id: idFilter,
             username: {
                 $in: [
-                    // new RegExp(`^${pattern}`, "i"),
-                    // new RegExp(`${pattern}$`, "i"),
                     new RegExp(`.*${pattern}.*`, "i"),
                 ]
             }
-        }, "_id username email")
-        res.send({ users: users })
+        }, "_id username email").lean()
+        var Users = await Promise.all(users.map
+            (async (User) => {
+                var user: UserTypeExt & { _id: any } = User as UserTypeExt & { _id: any }
+
+                const joinRequest = await JoinRoomRequest.exists({
+                    RequesterId: new mongoose.Types.ObjectId(user_id),
+                    ReceiverId: User._id,
+                    State: "Pending"
+                })
+                if (joinRequest !== null) {
+                    user.pendingRequest = true
+                } else if (joinRequest === null) {
+                    user.pendingRequest = false
+                }
+                return user
+            }));
+        res.send({ users: Users })
 
     } catch (e) {
         const err = e as Error
