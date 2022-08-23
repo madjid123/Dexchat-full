@@ -5,7 +5,7 @@ import {
     JoinRoomRemoveRequestFunction,
     JoinRoomAcceptRequestFunction,
     JoinRoomRejectRequestFunction,
-    getJoinRoomRequests
+    getJoinRoomRequestsFunction
 } from "../controllers/joinRoom"
 import { isAuth } from "./middlewares"
 
@@ -16,7 +16,7 @@ router.get("/request/:other_user_id", JoinRoomRequestFunction)
 router.get("/accept/:other_user_id", JoinRoomAcceptRequestFunction)
 router.get("/reject/:other_user_id", JoinRoomRejectRequestFunction)
 router.delete("/remove/:other_user_id", JoinRoomRemoveRequestFunction)
-router.get("/getrequests", getJoinRoomRequests)
+router.get("/getrequests", getJoinRoomRequestsFunction)
 app.use("/join_room/:user_id", isAuth, async (req, res, next) => {
     try {
         if (req.params.user_id !== (req.user as PassportUserType)._id.toHexString()) {
