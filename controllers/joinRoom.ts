@@ -140,8 +140,9 @@ export const getJoinRoomRequestsFunction =
             const user_id = (req.user as PassportUserType)._id.toHexString()
             const joinRoomRequests = await JoinRoomRequest.find({
                 ReceiverId: new mongoose.Types.ObjectId(user_id),
-                State: "Pending"
-            })
+                State: "Pending",
+
+            }).populate("RequesterId", "email username")
             res.json({
                 joinRoomRequests: joinRoomRequests
             })
