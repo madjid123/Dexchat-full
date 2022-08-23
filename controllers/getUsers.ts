@@ -5,6 +5,7 @@ import Room, { RoomType } from "../model/Room"
 import mongoose from "mongoose";
 import { PassportUserType } from "../config/Passport";
 import JoinRoomRequest from "../model/JoinRoomRequest";
+import { request } from "https";
 
 type Users = {
     users: mongoose.Types.ObjectId[]
@@ -18,7 +19,7 @@ export const getAllUsers = async (req: Request, res: Response, next: NextFunctio
         const reqUser = req.user as PassportUserType
         const user_id = req.params.user_id
         var pattern = req.query.pattern as string
-        var friends = req.query.pattern as string
+        var requests = req.query.requests as string
 
         if (pattern === undefined || pattern.length < 3) {
             pattern = ".*"
@@ -36,15 +37,8 @@ export const getAllUsers = async (req: Request, res: Response, next: NextFunctio
 
         })
         connectedUsers.users.push(new mongoose.Types.ObjectId(user_id))
-        var idFilter = {}
-        if (friends === "true") {
-            idFilter = {
-                $in: connectedUsers.users
-            }
-        } else {
-            idFilter = {
-                $nin: connectedUsers.users
-            }
+        var idFilter = {
+            $nin: connectedUsers.users
         }
 
 
@@ -59,19 +53,29 @@ export const getAllUsers = async (req: Request, res: Response, next: NextFunctio
         var Users = await Promise.all(users.map
             (async (User) => {
                 var user: UserTypeExt & { _id: any } = User as UserTypeExt & { _id: any }
+                let filter = { RequesterId: reqUser._id, ReceiverId: reqUser._id, State: "Pending" }
+                if (requests === "true") {
+                    filter.RequesterId = User._id
+                    filter.ReceiverId = reqUser._id
+                } else {
 
-                const joinRequest = await JoinRoomRequest.exists({
-                    RequesterId: new mongoose.Types.ObjectId(user_id),
-                    ReceiverId: User._id,
-                    State: "Pending"
-                })
+                    filter.RequesterId = reqUser._id
+                    filter.ReceiverId = User._id
+                }
+                const joinRequest = await JoinRoomRequest.exists(
+                    filter
+                )
                 if (joinRequest !== null) {
                     user.pendingRequest = true
                 } else if (joinRequest === null) {
                     user.pendingRequest = false
+                    if (requests === "true")
+                        return
+
                 }
                 return user
             }));
+        Users = Users.filter(u => u !== undefined)
         res.send({ users: Users })
 
     } catch (e) {
