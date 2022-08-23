@@ -12,7 +12,8 @@ type Users = {
 }
 // a recommendation system mockup
 type UserTypeExt = UserType & {
-    pendingRequest: boolean
+    pendingRequest: boolean,
+    to: boolean
 }
 export const getAllUsers = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -53,29 +54,38 @@ export const getAllUsers = async (req: Request, res: Response, next: NextFunctio
         var Users = await Promise.all(users.map
             (async (User) => {
                 var user: UserTypeExt & { _id: any } = User as UserTypeExt & { _id: any }
-                let filter = { RequesterId: reqUser._id, ReceiverId: reqUser._id, State: "Pending" }
-                if (requests === "true") {
-                    filter.RequesterId = User._id
-                    filter.ReceiverId = reqUser._id
-                } else {
+                const joinRequestFromThisUser = await JoinRoomRequest.exists(
+                    {
 
-                    filter.RequesterId = reqUser._id
-                    filter.ReceiverId = User._id
-                }
-                const joinRequest = await JoinRoomRequest.exists(
-                    filter
+                        RequesterId: reqUser._id,
+                        ReceiverId: User._id,
+                        State: "Pending"
+                    }
                 )
-                if (joinRequest !== null) {
-                    user.pendingRequest = true
-                } else if (joinRequest === null) {
+                const joinRequestToThisUser = await JoinRoomRequest.exists(
+                    {
+
+                        RequesterId: User._id,
+                        ReceiverId: reqUser._id,
+                        State: "Pending"
+                    }
+                )
+                if (joinRequestFromThisUser !== null || joinRequestToThisUser !== null) {
+                    if (joinRequestToThisUser !== null) {
+                        user.pendingRequest = true
+                        user.to = true
+                    } else {
+                        user.pendingRequest = true
+                        user.to = false
+                    }
+                } else {
                     user.pendingRequest = false
-                    if (requests === "true")
-                        return
+                    user.to = false
 
                 }
                 return user
             }));
-        Users = Users.filter(u => u !== undefined)
+        Users = Users.filter(u => u.to === false)
         res.send({ users: Users })
 
     } catch (e) {
