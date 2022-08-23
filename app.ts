@@ -41,8 +41,8 @@ app.use(passport.session());
 
 app.use(
   require("cors")({
-    origin: ["*", "http://localhost:3000", "http://192.168.137.245"],
-    methods: ["GET", "POST"],
+    origin: ["*", "http://localhost:3000", "http://192.168.137.245", "http://192.168.1.191:43483", "http://localhost:43483"],
+    methods: ["GET", "POST", "DELETE", "UPDATE"],
     credentials: true, // enable set cookie
   })
 );
