@@ -134,3 +134,21 @@ export const JoinRoomRemoveRequestFunction =
             res.status(500).send(err)
         }
     }
+export const getJoinRoomRequests =
+    async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const user_id = (req.user as PassportUserType)._id.toHexString()
+            const joinRoomRequests = await JoinRoomRequest.find({
+                ReceiverId: new mongoose.Types.ObjectId(user_id),
+                State: "Pending"
+            })
+            res.json({
+                joinRoomRequests: joinRoomRequests
+            })
+
+        } catch (e) {
+            const err = e as Error
+            console.error(err)
+            res.status(500).send(err)
+        }
+    }
