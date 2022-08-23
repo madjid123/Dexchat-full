@@ -134,7 +134,7 @@ export const JoinRoomRemoveRequestFunction =
             res.status(500).send(err)
         }
     }
-export const getJoinRoomRequests =
+export const getJoinRoomRequestsFunction =
     async (req: Request, res: Response, next: NextFunction) => {
         try {
             const user_id = (req.user as PassportUserType)._id.toHexString()
