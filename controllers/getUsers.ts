@@ -51,7 +51,7 @@ export const getAllUsers = async (req: Request, res: Response, next: NextFunctio
                 ]
             }
         }, "_id username email").lean()
-        var Users = await Promise.all(users.map
+        var Users = users.map
             (async (User) => {
                 var user: UserTypeExt & { _id: any } = User as UserTypeExt & { _id: any }
                 const joinRequestFromThisUser = await JoinRoomRequest.exists(
@@ -84,9 +84,9 @@ export const getAllUsers = async (req: Request, res: Response, next: NextFunctio
 
                 }
                 return user
-            }));
-        // Users = Users.filter(u => u.to === false)
-        res.send({ users: Users })
+            });
+        users = await Promise.all(Users)
+        res.send({ users: users })
 
     } catch (e) {
         const err = e as Error
