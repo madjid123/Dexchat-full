@@ -85,7 +85,7 @@ export const getAllUsers = async (req: Request, res: Response, next: NextFunctio
                 }
                 return user
             }));
-        Users = Users.filter(u => u.to === false)
+        // Users = Users.filter(u => u.to === false)
         res.send({ users: Users })
 
     } catch (e) {
