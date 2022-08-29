@@ -6,11 +6,13 @@ import fs from "fs"
 import mongoose from "mongoose";
 import passport from "./config/Passport";
 import session, { Session } from "express-session";
+import flash from "express-flash"
 const MongoStore = require("connect-mongodb-session")(session)
 
 app.use(express.urlencoded({ extended: true }));
 
 app.use(express.json());
+
 mongoose.connect(
   keys.mongodb.dbURI,
   (err) => {
@@ -25,6 +27,7 @@ const store: any = new MongoStore({
   collection: "sessions",
 })
 
+
 app.use(
   session({
     secret: process.env.SESSION_TOKEN as string,
@@ -32,12 +35,11 @@ app.use(
     saveUninitialized: false,
     rolling: true,
     store: store
-
   })
 );
-//app.use(passport.use, () => { });
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(flash());
 
 app.use(
   require("cors")({
