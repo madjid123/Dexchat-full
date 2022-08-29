@@ -43,7 +43,7 @@ router.get("/rooms", async (req, res, next) => {
     });
   }
 });
-app.use("/user/:user_id", async (req, res, next) => {
+app.use("/user/:user_id", isAuth, async (req, res, next) => {
   try {
     if (req.params.user_id !== (req.user as PassportUserType)._id.toHexString()) {
       res.status(500).send("Operation not allowed for this user")
