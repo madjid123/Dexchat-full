@@ -38,12 +38,25 @@ router.post("/login",
   });
 
 router.get("/logout", async (req, res, next) => {
-  req.session.destroy((err) => {
-    if (err) console.log(err.message)
-  });
-  console.log("logged out");
-  req.logout();
-  res.json("logged out successfully");
+  try {
+    req.session.destroy((err) => {
+      if (err) console.log(err.message)
+    });
+    req.logout((err) => {
+      console.log(err)
+      if (err !== undefined) {
+        console.error(err.message)
+        if (!req.isAuthenticated())
+          res.json("logged out successfully");
+        else
+          throw err
+      }
+    });
+  } catch (e) {
+    const err = e as Error
+    console.error(err.message)
+    res.status(500).send(err.message)
+  }
 });
 
 router.get("/login", (req, res, next) => {
