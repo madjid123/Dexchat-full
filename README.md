@@ -1,5 +1,7 @@
 # Dexchat-full 
+
 A messaging web application for educational purposes using MERN Stack.
+
 ## Technologies Used
 - NodeJS
 - Typescript
@@ -8,9 +10,11 @@ A messaging web application for educational purposes using MERN Stack.
 - Express
 - Socket.io
 - Redux Toolkits
+
 ## TODO
 - [x] User Authentication
 - [x] Room-based model
 - [x] Private messaging
+- [x] Requests between Users
 - [ ] Group Messaging
 - [ ] Dark and light Theme
