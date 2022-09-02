@@ -67,13 +67,12 @@ io.on("connection", (socket) => {
     if (users.indexOf(data.roomID) !== user._id)
       addUser(user._id, data.roomId);
   });
-
   socket.on("sendmsg", (data) => {
     const message = data.message as MessageType
     // socket.volatile.to(users[message.Receiver.id as any]).emit("getmsg", {
     //   message: message
     // });
-    console.log(message.Room.id)
+    console.log(message)
     socket.to(message.Room.id as any).emit(`getmsg:${message.Room.id}`, { message: message, room: message.Room.id })
   });
   socket.on("typing", (data) => {
