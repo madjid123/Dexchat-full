@@ -18,19 +18,22 @@ export const getMessages = async (req: Request, res: Response, next: NextFunctio
 		const messages_count = await Message.find({ Room: { id: Room_id } }).countDocuments()
 		page = (Querypage.length !== 0) ? parseInt(Querypage) : 1
 		const Pages = Math.ceil(messages_count / PER_PAGE)
-		let offset = messages_count - PER_PAGE*page
-		if(offset < 0){
+		let offset = messages_count - PER_PAGE * page
+		if (offset < 0) {
 			Limit = messages_count % PER_PAGE
 			offset = 0
 		}
 		const messages = await Message.find({ Room: { id: Room_id } })
 			.skip(offset)
 			.limit(Limit)
+		const room = await Room.findOne({ _id: Room_id }).populate("members", "username email")
 
 		res.json({
-			messages: messages,
-			page: page,
-			pages: Math.ceil(messages_count / PER_PAGE),
+			messagesResponse: {
+				messages: messages,
+				page: page,
+				pages: Math.ceil(messages_count / PER_PAGE),
+			}, room: room
 		})
 
 	} catch (err) {
