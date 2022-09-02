@@ -23,7 +23,7 @@ router.get("/rooms", async (req, res, next) => {
 
     var rooms = await Room.find({
       members: { $in: [new mongoose.Types.ObjectId(id)] },
-    }).populate("members", "username _id");
+    }).populate("members", "username email ");
     rooms = rooms.filter(room => {
       let Member: any = room.members.find(member => {
         if (member._id.toHexString() !== id) {
