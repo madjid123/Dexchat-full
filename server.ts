@@ -63,17 +63,16 @@ io.on("connection", (socket) => {
     console.log("sendusr")
     const user = data.user;
     data.rooms.map((room: any) => { socket.join(room) })
+    console.log(socket.rooms.values())
     console.log(socket.rooms)
     if (users.indexOf(data.roomID) !== user._id)
       addUser(user._id, data.roomId);
   });
   socket.on("sendmsg", (data) => {
     const message = data.message as MessageType
-    // socket.volatile.to(users[message.Receiver.id as any]).emit("getmsg", {
-    //   message: message
-    // });
-    console.log(message)
-    socket.to(message.Room.id as any).emit(`getmsg:${message.Room.id}`, { message: message, room: message.Room.id })
+    const room_id = (message.Room.id as any) as string
+    console.log(room_id)
+    socket.to(room_id).emit(`getmsg:${message.Room.id}`, { message: message, room: message.Room.id })
   });
   socket.on("typing", (data) => {
     socket.to(users[data.Receiver]).emit("typing", data.Sender)
