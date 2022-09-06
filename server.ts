@@ -41,7 +41,6 @@ io.use(wrap(passport.initialize()));
 io.use(wrap(passport.session()));
 io.use((socket: any, next) => {
   if (socket.request.user) {
-    console.log("socket ", socket.request.user)
     next();
   } else {
     next(new Error("unauthorized"))
