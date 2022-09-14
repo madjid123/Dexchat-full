@@ -7,7 +7,7 @@ import {
     JoinRoomRejectRequestFunction,
     getJoinRoomRequestsFunction
 } from "../controllers/joinRoom"
-import { isAuth } from "./middlewares"
+import { isAuth } from "../utils/middlewares/middlewares"
 
 export const app = express()
 const router = express.Router()
