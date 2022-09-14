@@ -1,5 +1,5 @@
 import express, { Router } from "express";
-import { isAuth } from "./middlewares"
+import { isAuth } from "../utils/middlewares/middlewares"
 import { getAllUsers } from "../controllers/getUsers"
 
 const app = express()
