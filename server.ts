@@ -59,12 +59,12 @@ const removeUser = (socketID: string) => {
 io.on("connection", (socket) => {
   console.log("connection", socket.id)
   socket.on("sendsocket", (data) => {
-    if (!data.user) return;
     console.log("sendusr")
     const user = data.user;
+    console.log(data.rooms)
     data.rooms.map((room: any) => { socket.join(room) })
-    console.log(socket.rooms.values())
     console.log(socket.rooms)
+    if (!user) return;
     if (users.indexOf(data.roomID) !== user._id)
       addUser(user._id, data.roomId);
   });
@@ -72,7 +72,9 @@ io.on("connection", (socket) => {
     const message = data.message as MessageType
     const room_id = (message.Room.id as any) as string
     console.log(room_id)
-    socket.to(room_id).emit(`getmsg:${message.Room.id}`, { message: message, room: message.Room.id })
+    console.log(`getmsg:${room_id}`)
+    console.log(socket.rooms)
+    socket.to(room_id).emit(`getmsg:${room_id}`, { message: message, room: room_id })
   });
   socket.on("typing", (data) => {
     socket.to(users[data.Receiver]).emit("typing", data.Sender)
