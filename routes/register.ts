@@ -31,8 +31,8 @@ app.post("/register",
       newUser.save();
       return res.json({ response: "User successfully created", name: username });
 
-    } catch (err: any) {
-
+    } catch (e) {
+      const err = e as Error
       console.error(err.message)
       res.status(402).json(err.message)
 
