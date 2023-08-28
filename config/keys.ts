@@ -1,6 +1,6 @@
 export default {
   mongodb: {
-    dbURI: "mongodb://127.0.0.1:27017/messaging?retryWrites=true&w=majority",
+    dbURI: "mongodb+srv://dexmad:chattest@dexmess.abdsp.mongodb.net/?retryWrites=true&w=majority",
   },
   google: {
     GOOGLE_CLIENT_ID:
