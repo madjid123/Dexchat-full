@@ -24,6 +24,7 @@ const io = new socketio.Server(Server, {
   cors: {
     origin: "http://localhost:3000",
   },
+  transports: ["websocket"],
 });
 io.use(
   wrap(
