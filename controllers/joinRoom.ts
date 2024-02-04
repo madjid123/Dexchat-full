@@ -25,8 +25,6 @@ export const JoinRoomRequestFunction =
 
                 }
             })
-            console.log(user_id, other_user_id)
-            console.log(roomExists)
             if (roomExists !== null) {
                 res.status(404).send("You already have room together")
                 return;
