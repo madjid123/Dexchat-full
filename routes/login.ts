@@ -23,14 +23,14 @@ router.post("/login",
         failureRedirect: "/auth/login",
         failureFlash: true,
       },
-      (err, user, info) => {
-        if (err) console.log(err);
+      (err : any, user:any, info: any) => {
+        if (err) console.error(err);
         if (!user) {
           const errors = [info?.message] as string[];
           return res.status(401).json(errors);
         }
         req.logIn(user, (err) => {
-          if (err) console.log(err);
+          if (err) console.error(err);
           res.json(user);
         });
       }
@@ -40,10 +40,9 @@ router.post("/login",
 router.get("/logout", async (req, res, next) => {
   try {
     req.session.destroy((err) => {
-      if (err) console.log(err.message)
+      if (err) console.error(err.message)
     });
     req.logout((err) => {
-      console.log(err)
       if (err !== undefined) {
         console.error(err.message)
         if (!req.isAuthenticated())
