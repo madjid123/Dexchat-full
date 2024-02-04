@@ -54,17 +54,12 @@ const addUser = (username: any, socketID: any) => {
   }
 };
 const removeUser = (socketID: string) => {
-  console.log(socketID)
   users = users.map((user, idx) => { if (idx !== users.indexOf(socketID)) return user })
 }
 io.on("connection", (socket) => {
-  console.log("connection", socket.id)
   socket.on("sendsocket", (data) => {
-    console.log("sendusr")
     const user = data.user;
-    console.log(data.rooms)
     data.rooms.map((room: any) => { socket.join(room) })
-    console.log(socket.rooms)
     if (!user) return;
     if (users.indexOf(data.roomID) !== user._id)
       addUser(user._id, data.roomId);
@@ -72,9 +67,6 @@ io.on("connection", (socket) => {
   socket.on("sendmsg", (data) => {
     const message = data.message as MessageType
     const room_id = (message.Room.id as any) as string
-    console.log(room_id)
-    console.log(`getmsg:${room_id}`)
-    console.log(socket.rooms)
     socket.to(room_id).emit(`getmsg:${room_id}`, { message: message, room: room_id })
   });
   socket.on("typing", (data) => {
@@ -82,19 +74,15 @@ io.on("connection", (socket) => {
   })
   socket.on("disconnect", (reason) => {
 
-    console.log("Disconnected");
-    console.log(reason);
     removeUser(socket.id)
-    console.log(users)
   });
 });
 
 io.listen(5001);
 process.on("SIGINT", () => {
   // io.close();
-  console.log("io is diconnecting")
   server.close((err) => {
-    if (err) console.log(err.message);
+    if (err) console.error(err.message);
   });
   mongoose.disconnect();
   process.exit(1);
