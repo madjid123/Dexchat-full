@@ -30,7 +30,7 @@ export const getRoomsHandlerFunction = async (req: Request, res: Response, next:
             Rooms: rooms,
         });
     } catch (err: any) {
-        console.log(err);
+        console.error(err);
         res.json({
             err: err.message,
         });
