@@ -7,10 +7,12 @@ import mongoose from "mongoose";
 import passport from "./config/Passport";
 import session, { Session } from "express-session";
 import flash from "express-flash";
+import path from "path";
 const MongoStore = require("connect-mongodb-session")(session);
 
 app.use(express.urlencoded({ extended: true }));
-
+// app.use(express.static(path.join(__dirname, 'public')));
+app.use('/public/images/users', express.static(path.join(__dirname, 'public/images/users')));
 app.use(express.json());
 
 mongoose.set("strictQuery", true);
@@ -33,6 +35,7 @@ app.use(
     store: store,
   })
 );
+app.use(passport.authenticate("session"));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
@@ -42,6 +45,7 @@ app.use(
     origin: [
       "*",
       "http://localhost:3000",
+      "http://localhost:4173",
       "http://192.168.137.245",
       "http://192.168.1.191:43483",
       "http://localhost:43483",
