@@ -15,7 +15,6 @@
     "@types/express-session": "^1.17.10",
     "@types/passport": "^1.0.16",
     "@types/sha256": "^0.2.2",
-    "avvvatars-react": "^0.4.2",
     "bluebird": "^3.7.2",
     "bootstrap-icons": "^1.11.3",
     "connect-mongo": "^4.6.0",
