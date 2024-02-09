@@ -8,8 +8,9 @@ import multer from "multer";
 import mongoose from "mongoose";
 const DEST_PATH = "public/images/users/";
 const uploads = multer({
-  preservePath: true,
+  // preservePath: true,
   storage: multer.memoryStorage(),
+
 });
 export const avatarUploads = uploads.single("avatar");
 export const modifyAvatarValidation =
@@ -46,16 +47,16 @@ export const modifyAvatarController = async (req: Request, res: Response) => {
 
 
     if (!user) return res.status(404).json({ message: "User not found" });
-    const imgPath = path.join(DEST_PATH, req.file.originalname);
+    const filename = sha256(req.file.originalname) + path.extname(req.file.originalname);
+    const imgPath = path.join(DEST_PATH, filename);
     const oldimgPath = user.image;
 
 
-    if (user.image && fs.existsSync(path.resolve(user.image))) {
-      fs.unlinkSync(path.resolve(user.image));
-    } else {
-      fs.writeFileSync(imgPath, req.file.buffer);
-      user.image = imgPath;
+    fs.writeFileSync(imgPath, req.file.buffer);
+    if (oldimgPath && fs.existsSync(path.resolve(oldimgPath))) {
+      fs.unlinkSync(path.resolve(oldimgPath));
     }
+    user.image = imgPath;
     await user.save();
     await session.commitTransaction()
     return res.json({
