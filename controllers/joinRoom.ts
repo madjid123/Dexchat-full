@@ -140,7 +140,7 @@ export const getJoinRoomRequestsFunction =
                 ReceiverId: new mongoose.Types.ObjectId(user_id),
                 State: "Pending",
 
-            }).populate("RequesterId", "email username")
+            }).populate("RequesterId", "email username image")
             res.json({
                 joinRoomRequests: joinRoomRequests
             })
