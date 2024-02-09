@@ -50,7 +50,7 @@ export const getAllUsers = async (req: Request, res: Response, next: NextFunctio
                     new RegExp(`.*${pattern}.*`, "i"),
                 ]
             }
-        }, "_id username email").lean()
+        }, "_id username email image").lean()
         var Users = users.map
             (async (User) => {
                 var user: UserTypeExt & { _id: any } = User as UserTypeExt & { _id: any }
