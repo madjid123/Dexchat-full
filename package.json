@@ -6,7 +6,7 @@
   "scripts": {
     "start": "nodemon server.js",
     "dev": "   nodemon --exec ts-node server.ts",
-    "build": "npx tsc",
+    "build": "npm install ; npx tsc",
     "bdev": "nodemon --exec ts-node server.ts",
     "bfdev": "concurrently 'npm run start' 'cd dexchat && npm start' "
   },
