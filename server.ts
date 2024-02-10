@@ -82,8 +82,8 @@ io.on("connection", (socket) => {
     removeUser(socket.id)
   });
 });
-
-io.listen(5001);
+const port = process.env.PORT ? Number.parseInt(process.env.PORT) : 5001;
+io.listen(port)
 process.on("SIGINT", () => {
   // io.close();
   server.close((err) => {
