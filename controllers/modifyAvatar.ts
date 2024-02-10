@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import User, { UserType } from "../model/User";
 import { body } from "express-validator";
 import fs from "fs";
-import path from "path";
+import path, { resolve } from "path";
 import { sha256 } from "js-sha256";
 import multer from "multer";
 import mongoose from "mongoose";
@@ -52,6 +52,7 @@ export const modifyAvatarController = async (req: Request, res: Response) => {
     const oldimgPath = user.image;
 
 
+    console.log(path.resolve(imgPath))
     fs.writeFileSync(imgPath, req.file.buffer);
     if (oldimgPath && fs.existsSync(path.resolve(oldimgPath))) {
       fs.unlinkSync(path.resolve(oldimgPath));
