@@ -53,7 +53,7 @@ export const modifyAvatarController = async (req: Request, res: Response) => {
 
 
     console.log(path.resolve(imgPath))
-    fs.writeFileSync(imgPath, req.file.buffer);
+    fs.writeFileSync(path.resolve(imgPath), req.file.buffer);
     if (oldimgPath && fs.existsSync(path.resolve(oldimgPath))) {
       fs.unlinkSync(path.resolve(oldimgPath));
     }
@@ -69,7 +69,7 @@ export const modifyAvatarController = async (req: Request, res: Response) => {
     await session?.abortTransaction(); // Use optional chaining to handle the case when 'session' is undefined
     const err = e as Error;
     console.error(err.message);
-    res.status(500).json({ message: err.message });
+    res.status(500).json({ errors: [err.message] });
   } finally {
     session?.endSession();
   }
