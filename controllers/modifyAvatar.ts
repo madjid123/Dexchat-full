@@ -1,12 +1,17 @@
 import { Request, Response } from "express";
-import User, { UserType } from "../model/User";
+import User from "../model/User";
 import { body } from "express-validator";
 import fs from "fs";
-import path, { resolve } from "path";
+import path from "path";
 import { sha256 } from "js-sha256";
 import multer from "multer";
 import mongoose from "mongoose";
-const DEST_PATH = "public/images/users/";
+let DEST_PATH: string;
+if (process.env.NODE_ENV === "production") {
+  DEST_PATH = "build/public/images/users/";
+} else {
+  DEST_PATH = "public/images/users/";
+}
 const uploads = multer({
   // preservePath: true,
   storage: multer.memoryStorage(),
