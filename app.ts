@@ -57,6 +57,7 @@ app.use(
       "*",
       "http://localhost:3000",
       "https://dexchat-frontend.onrender.com",
+      "https://dexchat-full.onrender.com",
       "https://dexchat.vercel.app",
 
     ],
