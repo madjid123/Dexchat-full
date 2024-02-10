@@ -9,18 +9,20 @@ import session from "express-session"
 import passport from "./config/Passport"
 import https from "https";
 import { MessageType } from "./model/Message";
-const MongoStore = require("connect-mongodb-session")(session)
+import MongoStore from "connect-mongodb-session";
+// const MongoStore = require("connect-mongodb-session")(session)
+const mongoStore = MongoStore(session);
 const server = app.listen(process.env.PORT || 5000, () => {
   console.log("app is running on port 5000");
 });
-const Server = https.createServer(app);
-import socketio from "socket.io"
+const HttpServer = https.createServer(app);
+import { Server } from "socket.io"
 const wrap = (middleware: any) => (socket: any, next: any) => middleware(socket.request, {}, next);
-const store: any = new MongoStore({
+const store: any = new mongoStore({
   uri: keys.mongodb.dbURI,
   collection: "sessions",
 })
-const io = new socketio.Server(Server, {
+const io = new Server(HttpServer, {
   cors: {
     origin: "http://localhost:3000",
   },

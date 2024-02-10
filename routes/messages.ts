@@ -7,4 +7,4 @@ const app = express()
 router.get("/room/:room_id", [isAuth], getMessages)
 
 app.use("/messages", router)
-module.exports = app
+export default app

@@ -1,6 +1,0 @@
-{
-	"watch": ["./", "./routes/","./config", "./model"],
-	"ext": "ts,json",
-	"ignore": ["./**/*.spec.ts","./dexchat/**/"],
-	"exec": "ts-node ./server.ts"      
-      }

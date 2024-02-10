@@ -100,4 +100,4 @@ router.get(
   }
 );
 app.use("/auth", router);
-module.exports = app;
+export default app;
