@@ -23,10 +23,12 @@ import { fileURLToPath } from 'url';
 app.use(express.urlencoded({ extended: true }));
 // app.use(express.static(path.join(__dirname, 'public')));
 let publicPath = path.join(__dirname, 'public/images/users');
+let imagesPrefix = "/public/images/users";
 if (process.env.NODE_ENV === "production") {
+  imagesPrefix = "/build/public/images/users";
   publicPath = path.join(__dirname, 'build/public/images/users');
 }
-app.use('/public/images/users', express.static(publicPath))
+app.use(imagesPrefix, express.static(publicPath))
 app.use(express.json());
 
 mongoose.set("strictQuery", true);
