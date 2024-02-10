@@ -1,7 +1,7 @@
 export default {
   mongodb: {
-    // dbURI:"mongodb+srv://dexmad:chattest@dexmess.abdsp.mongodb.net/?retryWrites=true&w=majority",
-    dbURI: "mongodb://localhost:27017/?retryWrites=true&w=majority",
+    dbURI: "mongodb+srv://dexmad:chattest@dexmess.abdsp.mongodb.net/?retryWrites=true&w=majority",
+    // dbURI: "mongodb://localhost:27017/?retryWrites=true&w=majority",
   },
   google: {
     GOOGLE_CLIENT_ID:

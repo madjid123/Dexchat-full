@@ -6,6 +6,7 @@
   "scripts": {
     "start": "nodemon build/server.js",
     "dev": "   nodemon --exec tsx server.ts",
+    "prebuild": "rm -rf build",
     "build": "npm install ; tsc --outDir build ",
     "devbuild": " tsc --outDir build ",
     "bdev": "nodemon --exec tsx server.ts",
