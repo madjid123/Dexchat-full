@@ -63,8 +63,11 @@ app.use(
       "https://dexchat.vercel.app",
     ],
     methods: ["GET", "POST", "DELETE", "UPDATE"],
+
     credentials: true, // enable set cookie
+
   })
+
 );
 import joinRoomrequest from "./routes/JoinRoom"
 //app.use("/", require("./routes/register"));

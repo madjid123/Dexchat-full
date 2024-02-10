@@ -2,27 +2,25 @@ import dotenv from "dotenv"
 dotenv.config();
 
 import app from "./app"
-import mongoose from "mongoose";
-import Cors from "cors"
+import mongoose, { ObjectId, SchemaType } from "mongoose";
 import keys from "./config/keys";
 import session from "express-session"
 import passport from "./config/Passport"
-import https from "https";
 import { MessageType } from "./model/Message";
 import MongoStore from "connect-mongodb-session";
 // const MongoStore = require("connect-mongodb-session")(session)
 const mongoStore = MongoStore(session);
+
 const server = app.listen(process.env.PORT || 5000, () => {
   console.log("app is running on port 5000");
 });
-const HttpServer = https.createServer(app);
 import { Server } from "socket.io"
 const wrap = (middleware: any) => (socket: any, next: any) => middleware(socket.request, {}, next);
 const store: any = new mongoStore({
   uri: keys.mongodb.dbURI,
   collection: "sessions",
 })
-const io = new Server(HttpServer, {
+const io = new Server(server, {
   cors: {
     origin: ["*", "http://localhost:3000", "https://dexchat.vercel.app",],
     credentials: true
@@ -45,11 +43,19 @@ io.use(
 //app.use(passport.use, () => { });
 io.use(wrap(passport.initialize()));
 io.use(wrap(passport.session()));
-io.use((socket: any, next) => {
-  if (socket.request.user) {
-    next();
-  } else {
-    next(new Error("unauthorized"))
+io.use((socket, next) => {
+  try {
+    // console.log(((socket.request as any).user._id))
+    if ((socket.request as any).user !== undefined) {
+      next();
+    } else {
+      next(new Error("unauthorized"))
+    }
+  }
+  catch (e) {
+    const error = e as Error
+    console.error(error.message)
+
   }
 });
 var users = [] as any[];
@@ -82,8 +88,9 @@ io.on("connection", (socket) => {
     removeUser(socket.id)
   });
 });
-const port = process.env.PORT ? Number.parseInt(process.env.PORT) : 5001;
-io.listen(port)
+
+// const port = process.env.PORT ? Number.parseInt(process.env.PORT) : 5001;
+// io.listen(port)
 process.on("SIGINT", () => {
   // io.close();
   server.close((err) => {
