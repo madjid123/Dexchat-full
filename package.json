@@ -8,7 +8,7 @@
     "dev": "   nodemon --exec tsx server.ts",
     "prebuild": "rm -rf build",
     "build": "npm install ; tsc --outDir build ",
-    "postbuild": "cd build ; mkdir -p public/images/users",
+    "postbuild": "cd build ; mkdir -p public/images/users; ls",
     "devbuild": " tsc --outDir build ",
     "bdev": "nodemon --exec tsx server.ts",
     "bfdev": "concurrently 'npm run bdev' 'cd dexchat && npm start' "
