@@ -42,6 +42,7 @@ app.use(
     secret: process.env.SESSION_TOKEN as string,
     resave: false,
     saveUninitialized: false,
+    proxy: true, //or use this
     rolling: true,
     store: store,
     cookie: {
