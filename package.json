@@ -47,7 +47,6 @@
     "react-infinite-scroll-hook": "^4.1.1",
     "socket.io": "^4.7.4",
     "ts-node": "^10.9.2",
-    "tsc": "*",
     "typescript": "^4.9.5"
   },
   "devDependencies": {
