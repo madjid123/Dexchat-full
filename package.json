@@ -5,8 +5,8 @@
   "type": "module",
   "scripts": {
     "start": "nodemon server.js",
-    "dev": "   nodemon --exec ts-node server.ts",
-    "build": "npm install ; tsx",
+    "dev": "   nodemon --exec tsx server.ts",
+    "build": "npm install ; tsc",
     "bdev": "nodemon --exec tsx server.ts",
     "bfdev": "concurrently 'npm run bdev' 'cd dexchat && npm start' "
   },
