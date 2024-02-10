@@ -24,7 +24,7 @@ const store: any = new mongoStore({
 })
 const io = new Server(HttpServer, {
   cors: {
-    origin: "http://localhost:3000",
+    origin: ["http://localhost:3000", "https://dexchat.vercel.app"]
   },
   transports: ["websocket"],
 });
@@ -80,7 +80,7 @@ io.on("connection", (socket) => {
   });
 });
 
-io.listen(5001);
+// io.listen(5001);
 process.on("SIGINT", () => {
   // io.close();
   server.close((err) => {
