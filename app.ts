@@ -56,13 +56,10 @@ app.use(
     origin: [
       "*",
       "http://localhost:3000",
-      "http://localhost:4173",
-      "http://192.168.137.245",
-      "http://192.168.1.191:43483",
-      "http://localhost:43483",
+      "https://dexchat-frontend.onrender.com",
       "https://dexchat.vercel.app",
+
     ],
-    methods: ["GET", "POST", "DELETE", "UPDATE"],
 
     credentials: true, // enable set cookie
 
