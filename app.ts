@@ -22,7 +22,11 @@ import { fileURLToPath } from 'url';
 
 app.use(express.urlencoded({ extended: true }));
 // app.use(express.static(path.join(__dirname, 'public')));
-app.use('/public/images/users', express.static(path.join(__dirname, 'public/images/users')));
+let publicPath = path.join(__dirname, 'public/images/users');
+if (process.env.NODE_ENV === "production") {
+  publicPath = path.join(__dirname, 'build/public/images/users');
+}
+app.use('/public/images/users', express.static(publicPath))
 app.use(express.json());
 
 mongoose.set("strictQuery", true);
