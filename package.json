@@ -38,7 +38,16 @@
     "passport-local": "^1.0.0",
     "react-bootstrap-icons": "^1.10.3",
     "react-infinite-scroll-hook": "^4.1.1",
-    "socket.io": "^4.7.4"
+    "socket.io": "^4.7.4",
+    "@types/express": "^4.17.21",
+    "@types/express-flash": "^0.0.2",
+    "@types/multer": "^1.4.11",
+    "@types/node": "^17.0.45",
+    "@types/passport-google-oauth20": "^2.0.14",
+    "@types/passport-local": "^1.0.38",
+    "concurrently": "^7.6.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^4.9.5"
   },
   "devDependencies": {
     "@types/express": "^4.17.21",
