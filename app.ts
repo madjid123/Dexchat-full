@@ -61,9 +61,9 @@ app.use(
       "https://dexchat.vercel.app",
 
     ],
-
+    methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true, // enable set cookie
-
+    allowedHeaders: ['Content-Type', 'Authorization'] // Specify allowed headers
   })
 
 );
