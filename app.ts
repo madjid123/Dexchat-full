@@ -17,8 +17,8 @@ import Cors from "cors"
 const mongoStore = MongoStore(session)
 import { fileURLToPath } from 'url';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+// const __filename = fileURLToPath(import.meta.url);
+// const __dirname = path.dirname(__filename);
 
 app.use(express.urlencoded({ extended: true }));
 // app.use(express.static(path.join(__dirname, 'public')));
@@ -71,13 +71,13 @@ fs.readdir("./routes", async (err, files) => {
   files.filter(async (file) => {
     file = file.slice(0, file.length - 3);
     //app.use("/", require("./routes/" + file));
-    // app.use((await import("./routes/" + file)), (res, req, next) => {
-    //   next();
-    // });
-    const route = await import("./routes/" + file);
+    app.use(require("./routes/" + file), (res, req, next) => {
+      next();
+    });
+    // const route = await import("./routes/" + file);
 
     // console.log(route)
-    app.use(route.default)
+    // app.use(route.default)
   });
 });
 

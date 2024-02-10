@@ -89,3 +89,4 @@ process.on("SIGINT", () => {
   mongoose.disconnect();
   process.exit(1);
 });
+export default server
