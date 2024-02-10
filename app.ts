@@ -44,6 +44,11 @@ app.use(
     saveUninitialized: false,
     rolling: true,
     store: store,
+    cookie: {
+      sameSite: 'none',
+      secure: true,
+      maxAge: 30000
+    }
   })
 );
 app.use(passport.authenticate("session"));
@@ -67,7 +72,7 @@ app.use(
   })
 
 );
-import joinRoomrequest from "./routes/JoinRoom"
+
 //app.use("/", require("./routes/register"));
 fs.readdir("./routes", async (err, files) => {
   files.filter(async (file) => {
