@@ -3,7 +3,7 @@ dotenv.config();
 
 import app from "./app"
 import mongoose from "mongoose";
-
+import Cors from "cors"
 import keys from "./config/keys";
 import session from "express-session"
 import passport from "./config/Passport"
@@ -24,10 +24,13 @@ const store: any = new mongoStore({
 })
 const io = new Server(HttpServer, {
   cors: {
-    origin: ["http://localhost:3000", "https://dexchat.vercel.app"]
+    origin: ["*", "http://localhost:3000", "https://dexchat.vercel.app",],
+    credentials: true
   },
   transports: ["websocket"],
+
 });
+
 io.use(
   wrap(
     session({
