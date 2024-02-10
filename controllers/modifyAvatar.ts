@@ -7,10 +7,11 @@ import { sha256 } from "js-sha256";
 import multer from "multer";
 import mongoose from "mongoose";
 let DEST_PATH: string;
+const IMAGE_PREFIX = "images/users";
 if (process.env.NODE_ENV === "production") {
-  DEST_PATH = "build/public/images/users/";
+  DEST_PATH = `build/public/${IMAGE_PREFIX}`;
 } else {
-  DEST_PATH = "public/images/users/";
+  DEST_PATH = `public/${IMAGE_PREFIX}`;
 }
 const uploads = multer({
   // preservePath: true,
@@ -54,15 +55,16 @@ export const modifyAvatarController = async (req: Request, res: Response) => {
     if (!user) return res.status(404).json({ message: "User not found" });
     const filename = sha256(req.file.originalname) + path.extname(req.file.originalname);
     const imgPath = path.join(DEST_PATH, filename);
+    const relativeImgPath = path.join(IMAGE_PREFIX, filename);
     const oldimgPath = user.image;
 
-
+    console.log(relativeImgPath)
     console.log(path.resolve(imgPath))
     fs.writeFileSync(path.resolve(imgPath), req.file.buffer);
     if (oldimgPath && fs.existsSync(path.resolve(oldimgPath))) {
       fs.unlinkSync(path.resolve(oldimgPath));
     }
-    user.image = imgPath;
+    user.image = relativeImgPath;
     await user.save();
     await session.commitTransaction()
     return res.json({
