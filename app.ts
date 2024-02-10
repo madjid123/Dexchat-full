@@ -26,7 +26,7 @@ var publicPath = path.join(__dirname, 'public/images/users');
 // var imagesPrefix = "/public/images/users";
 if (process.env.NODE_ENV === "production") {
   // imagesPrefix = "/build/public/images/users";
-  publicPath = path.join(__dirname, 'build/public/images/users');
+  publicPath = path.join(__dirname, 'public/images/users');
 }
 const IMAGE_PREFIX = "/images/users";
 console.log(publicPath)
