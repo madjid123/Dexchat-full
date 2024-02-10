@@ -71,7 +71,8 @@ fs.readdir("./routes", async (err, files) => {
   files.filter(async (file) => {
     file = file.slice(0, file.length - 3);
     //app.use("/", require("./routes/" + file));
-    app.use(require("./routes/" + file), (res, req, next) => {
+    const route = require("./routes/" + file);
+    app.use(route.default, (res, req, next) => {
       next();
     });
     // const route = await import("./routes/" + file);

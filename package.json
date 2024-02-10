@@ -4,9 +4,10 @@
   "private": true,
   "type": "commonjs",
   "scripts": {
-    "start": "nodemon server.js",
+    "start": "nodemon build/server.js",
     "dev": "   nodemon --exec tsx server.ts",
-    "build": "npm install ; tsc",
+    "build": "npm install ; tsc --outDir build ",
+    "devbuild": " tsc --outDir build ",
     "bdev": "nodemon --exec tsx server.ts",
     "bfdev": "concurrently 'npm run bdev' 'cd dexchat && npm start' "
   },
