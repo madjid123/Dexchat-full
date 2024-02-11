@@ -12,25 +12,25 @@ import flash from "express-flash";
 import path from "path";
 // const MongoStore = require("connect-mongodb-session")(session);
 import MongoStore, { MongoDBStore } from "connect-mongodb-session";
-import Cors from "cors"
+import Cors from "cors";
 
-const mongoStore = MongoStore(session)
-import { fileURLToPath } from 'url';
+const mongoStore = MongoStore(session);
+import { fileURLToPath } from "url";
 
 // const __filename = fileURLToPath(import.meta.url);
 // const __dirname = path.dirname(__filename);
 
 app.use(express.urlencoded({ extended: true }));
 // app.use(express.static(path.join(__dirname, 'public')));
-var publicPath = path.join(__dirname, 'public/images/users');
+var publicPath = path.join(__dirname, "public/images/users");
 // var imagesPrefix = "/public/images/users";
 if (process.env.NODE_ENV === "production") {
   // imagesPrefix = "/build/public/images/users";
-  publicPath = path.join(__dirname, 'public/images/users');
+  publicPath = path.join(__dirname, "public/images/users");
 }
 const IMAGE_PREFIX = "/images/users";
-console.log(publicPath)
-app.use(IMAGE_PREFIX, express.static(publicPath))
+console.log(publicPath);
+app.use(IMAGE_PREFIX, express.static(publicPath));
 app.use(express.json());
 
 mongoose.set("strictQuery", true);
@@ -44,20 +44,22 @@ const store: any = new mongoStore({
   uri: keys.mongodb.dbURI,
   collection: "sessions",
 });
-
+console.log(process.env.SESSION_TOKEN);
 app.use(
   session({
     secret: process.env.SESSION_TOKEN as string,
-    resave: false,
+    resave: true,
     saveUninitialized: false,
     proxy: true, //or use this
     rolling: true,
     store: store,
     cookie: {
-      sameSite: 'none',
-      secure: true,
-      maxAge: 30000
-    }
+      sameSite: "lax",
+      // sameSite: true,
+      secure: process.env.NODE_ENV === "production",
+      // secure: false,
+      maxAge: 1000 * 3600 * 24 * +14, // the session will be valid for 14 days
+    },
   })
 );
 app.use(passport.authenticate("session"));
@@ -73,13 +75,11 @@ app.use(
       "https://dexchat-frontend.onrender.com",
       "https://dexchat-full.onrender.com",
       "https://dexchat.vercel.app",
-
     ],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true, // enable set cookie
-    allowedHeaders: ['Content-Type', 'Authorization'] // Specify allowed headers
+    allowedHeaders: ["Content-Type", "Authorization", "Cookie"], // Specify allowed headers
   })
-
 );
 
 //app.use("/", require("./routes/register"));
