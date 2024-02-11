@@ -54,7 +54,7 @@ app.use(
     rolling: true,
     store: store,
     cookie: {
-      sameSite: "lax",
+      sameSite: "none",
       // sameSite: true,
       secure: process.env.NODE_ENV === "production",
       // secure: false,
