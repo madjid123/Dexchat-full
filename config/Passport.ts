@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import keys from "./keys";
 import GoogleStrategy from "passport-google-oauth20";
 import User, { UserType } from "../model/User";
 import LocalStrategy from "passport-local";
