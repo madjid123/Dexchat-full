@@ -21,7 +21,7 @@ import isEqual from "lodash.isequal";
 const wrap = (middleware: any) => (socket: any, next: any) =>
   middleware(socket.request, {}, next);
 const store: any = new mongoStore({
-  uri: keys.mongodb.dbURI,
+  uri: process.env.MONGODB_URL!,
   collection: "sessions",
 });
 const io = new Server(server, {

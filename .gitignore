@@ -27,3 +27,4 @@ config/keys.ts
 # public images
 /public/images
 keys.ts
+.env.production
