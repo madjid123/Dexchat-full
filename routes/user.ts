@@ -36,4 +36,4 @@ app.use(
     .withMessage("User ID must be provided"),
   router
 );
-module.exports = app;
+export default app;

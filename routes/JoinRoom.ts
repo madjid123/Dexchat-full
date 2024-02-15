@@ -30,4 +30,4 @@ app.use("/join_room/:user_id", isAuth, async (req, res, next) => {
     }
 })
 app.use("/join_room/:user_id", router)
-module.exports = app
+export default app

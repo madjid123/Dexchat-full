@@ -9,4 +9,4 @@ router.post("/:room_id/send/message", isAuth, RoomSendMessage)
 
 
 app.use("/room", router)
-module.exports = app
+export default app

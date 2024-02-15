@@ -6,4 +6,5 @@ const app = express()
 const router = Router();
 router.get("/:user_id/getallusers", isAuth, getAllUsers)
 app.use("/search", router)
-module.exports = app
+export default app
+

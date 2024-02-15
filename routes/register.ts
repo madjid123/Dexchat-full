@@ -25,4 +25,4 @@ app.post("/register",
 
 const Register = app;
 
-module.exports = Register;
+export default Register;
