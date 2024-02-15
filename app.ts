@@ -3,7 +3,6 @@ import dotenv from "dotenv";
 dotenv.config();
 import express, { Router as ExpressRouter } from "express";
 var app = express();
-import keys from "./config/keys";
 import fs from "fs";
 import mongoose from "mongoose";
 import passport from "./config/Passport";

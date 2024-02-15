@@ -3,7 +3,6 @@ dotenv.config();
 
 import app from "./app";
 import mongoose, { ObjectId, SchemaType } from "mongoose";
-import keys from "./config/keys";
 import session from "express-session";
 import passport from "./config/Passport";
 import { MessageType } from "./model/Message";
