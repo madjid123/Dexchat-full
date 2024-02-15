@@ -29,7 +29,6 @@ if (process.env.NODE_ENV === "production") {
   publicPath = path.join(__dirname, "public/images/users");
 }
 const IMAGE_PREFIX = "/images/users";
-console.log(publicPath);
 app.use(IMAGE_PREFIX, express.static(publicPath));
 app.use(express.json());
 
@@ -44,27 +43,26 @@ const store: any = new mongoStore({
   uri: keys.mongodb.dbURI,
   collection: "sessions",
 });
-console.log(process.env.SESSION_TOKEN);
-app.use(
-  session({
-    secret: process.env.SESSION_TOKEN as string,
-    resave: true,
-    saveUninitialized: false,
-    proxy: true, //or use this
-    rolling: true,
-    store: store,
-    cookie: {
-      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-      // sameSite: true,
-      secure: process.env.NODE_ENV === "production",
-      // secure: false,
-      maxAge: 1000 * 3600 * 24 * +14, // the session will be valid for 14 days
-    },
-  })
-);
-app.use(passport.authenticate("session"));
+// app.use(
+//   session({
+//     secret: process.env.SESSION_TOKEN as string,
+//     resave: true,
+//     saveUninitialized: false,
+//     proxy: true, //or use this
+//     rolling: true,
+//     store: store,
+//     cookie: {
+//       sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+//       // sameSite: true,
+//       secure: process.env.NODE_ENV === "production",
+//       // secure: false,
+//       maxAge: 1000 * 3600 * 24 * +14, // the session will be valid for 14 days
+//     },
+//   })
+// );
+// app.use(passport.authenticate("jwt", { session: false }));
 app.use(passport.initialize());
-app.use(passport.session());
+// app.use(passport.session());
 app.use(flash());
 
 app.use(
