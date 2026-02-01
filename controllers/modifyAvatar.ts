@@ -20,7 +20,7 @@ const uploads = multer({
 export const avatarUploads = uploads.single("avatar");
 export const modifyAvatarValidation = body(
   "avatar",
-  "Avatar must be an image of type jpg,png,svg,jpeg,svg"
+  "Avatar must be an image of type jpg,png,svg,jpeg,svg",
 ).custom((value, { req }) => {
   if (!req.file) {
     throw new Error("No file uploaded");
@@ -68,7 +68,7 @@ export const modifyAvatarController = async (req: Request, res: Response) => {
 
     console.log(relativeImgPath);
     console.log(path.resolve(imgPath));
-    fs.writeFileSync(path.resolve(imgPath), req.file.buffer);
+    fs.writeFileSync(path.resolve(imgPath), new Uint8Array(req.file.buffer));
     if (oldimgPath && fs.existsSync(path.resolve(oldimgPath))) {
       fs.unlinkSync(path.resolve(oldimgPath));
     }
