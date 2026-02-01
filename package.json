@@ -4,13 +4,13 @@
   "private": true,
   "type": "commonjs",
   "scripts": {
-    "start": "nodemon build/server.js",
-    "dev": "   nodemon --exec tsx server.ts",
+    "start": "node build/server.js",
+    "dev": "   npx nodemon --exec tsx server.ts",
     "prebuild": "rm -rf build",
-    "build": "npm install ; tsc --outDir build ",
+    "build": "npx tsc --outDir build ",
     "postbuild": "cd build ; mkdir -p public/images/users; ls",
-    "devbuild": " tsc --outDir build ",
-    "bdev": "nodemon --exec tsx server.ts",
+    "devbuild": " npx tsc --outDir build ",
+    "bdev": "npx nodemon --exec tsx server.ts",
     "bfdev": "concurrently 'npm run bdev' 'cd dexchat && npm start' "
   },
   "dependencies": {
