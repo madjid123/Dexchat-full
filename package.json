@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node build/server.js",
     "dev": "   npx nodemon --exec tsx server.ts",
-    "prebuild": "rm -rf build",
+    "prebuild": "rm -rf build; npm install",
     "build": "npx tsc --outDir build ",
     "postbuild": "cd build ; mkdir -p public/images/users; ls",
     "devbuild": " npx tsc --outDir build ",
@@ -49,7 +49,7 @@
     "react-infinite-scroll-hook": "^4.1.1",
     "socket.io": "^4.7.4",
     "ts-node": "^10.9.2",
-    "typescript": "^4.9.5"
+    "typescript": "^5.0.0"
   },
   "devDependencies": {
     "@types/connect-mongodb-session": "^2.4.7",
@@ -67,7 +67,7 @@
     "ts-node": "^10.9.2",
     "tsc-esm-fix": "^2.20.23",
     "tsx": "^4.7.1",
-    "typescript": "^4.9.5"
+    "typescript": "^5.0.0"
   },
   "engines": {
     "node": ">=21.5.0"
